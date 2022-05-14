@@ -60,12 +60,3 @@ target/
 
 /data
 /models
-/src
-/reports
-/notebooks
-/logs
-/config
-/task-1-data-collection-and-preprocessing
-/task-4-language-transformer-models
-/task-5-testing
-/task-6-model-deployment
