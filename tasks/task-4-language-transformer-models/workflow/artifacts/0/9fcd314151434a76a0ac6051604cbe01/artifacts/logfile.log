@@ -1,0 +1,402 @@
+INFO - 05/20/22 16:34:03 - 0:00:00 - batch_size: 16
+                                     device: cuda:0
+                                     es_factor: 0.2
+                                     es_patience: 2
+                                     focal_alpha: 0.7
+                                     focal_gamma: 2
+                                     gradient_accumulation_steps: 8
+                                     hidden_size: 768
+                                     label_smoothing: 0.2
+                                     loss_type: smoothed_focal_bce
+                                     lr: 3e-05
+                                     lr_factor: 0.5
+                                     lr_patience: 1
+                                     max_epochs: 10
+                                     max_length: 256
+                                     metric_name: f1
+                                     model_path: google/muril-base-cased
+                                     num_workers: 2
+                                     savedir: /content/temp/NYU/tasks/task-4-language-transformer-models/workflow/hate_speech_binary_classification/google/muril-base-cased
+                                     seed: 1111
+                                     task_name: hate_speech_binary_classification
+                                     tunning_metric: F1
+                                     use_binary_classification: True
+                                     use_fp16: True
+DEBUG - 05/20/22 16:34:03 - 0:00:00 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:04 - 0:00:01 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:04 - 0:00:01 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:04 - 0:00:02 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:04 - 0:00:02 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:05 - 0:00:02 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:05 - 0:00:02 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:06 - 0:00:03 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/vocab.txt HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:06 - 0:00:03 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:07 - 0:00:04 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/tokenizer.json HTTP/1.1" 404 0
+DEBUG - 05/20/22 16:34:07 - 0:00:04 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:07 - 0:00:05 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/added_tokens.json HTTP/1.1" 404 0
+DEBUG - 05/20/22 16:34:07 - 0:00:05 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:08 - 0:00:05 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/special_tokens_map.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:08 - 0:00:05 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:09 - 0:00:06 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:09 - 0:00:06 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:10 - 0:00:07 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:10 - 0:00:07 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:11 - 0:00:08 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:11 - 0:00:08 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:12 - 0:00:09 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG - 05/20/22 16:34:12 - 0:00:09 - Starting new HTTPS connection (1): huggingface.co:443
+DEBUG - 05/20/22 16:34:13 - 0:00:10 - https://huggingface.co:443 "HEAD /google/muril-base-cased/resolve/main/pytorch_model.bin HTTP/1.1" 302 0
+INFO - 05/20/22 16:34:21 - 0:00:18 - SentClf(
+                                       (enc): TxtEncoder(
+                                         (model): BertModel(
+                                           (embeddings): BertEmbeddings(
+                                             (word_embeddings): Embedding(197285, 768, padding_idx=0)
+                                             (position_embeddings): Embedding(512, 768)
+                                             (token_type_embeddings): Embedding(2, 768)
+                                             (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                             (dropout): Dropout(p=0.1, inplace=False)
+                                           )
+                                           (encoder): BertEncoder(
+                                             (layer): ModuleList(
+                                               (0): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (1): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (2): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (3): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (4): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (5): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (6): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (7): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (8): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (9): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (10): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                               (11): BertLayer(
+                                                 (attention): BertAttention(
+                                                   (self): BertSelfAttention(
+                                                     (query): Linear(in_features=768, out_features=768, bias=True)
+                                                     (key): Linear(in_features=768, out_features=768, bias=True)
+                                                     (value): Linear(in_features=768, out_features=768, bias=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                   (output): BertSelfOutput(
+                                                     (dense): Linear(in_features=768, out_features=768, bias=True)
+                                                     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                     (dropout): Dropout(p=0.1, inplace=False)
+                                                   )
+                                                 )
+                                                 (intermediate): BertIntermediate(
+                                                   (dense): Linear(in_features=768, out_features=3072, bias=True)
+                                                   (intermediate_act_fn): GELUActivation()
+                                                 )
+                                                 (output): BertOutput(
+                                                   (dense): Linear(in_features=3072, out_features=768, bias=True)
+                                                   (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+                                                   (dropout): Dropout(p=0.1, inplace=False)
+                                                 )
+                                               )
+                                             )
+                                           )
+                                           (pooler): BertPooler(
+                                             (dense): Linear(in_features=768, out_features=768, bias=True)
+                                             (activation): Tanh()
+                                           )
+                                         )
+                                       )
+                                       (clf): Sequential(
+                                         (0): Linear(in_features=768, out_features=768, bias=True)
+                                         (1): BatchNorm1d(768, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+                                         (2): ReLU()
+                                         (3): Dropout(p=0.1, inplace=False)
+                                         (4): Linear(in_features=768, out_features=2, bias=True)
+                                       )
+                                     )
+INFO - 05/20/22 16:34:32 - 0:00:30 - Training..
+INFO - 05/20/22 16:40:04 - 0:06:02 - Train Loss: 0.0087
+INFO - 05/20/22 16:40:04 - 0:06:02 - Val: Loss: 0.05848 | F1: 0.71999 | Precision: 0.77661 | Recall: 0.69555 | Accuracy: 0.82211
+DEBUG - 05/20/22 16:40:04 - 0:06:02 - Resetting dropped connection: dagshub.com
+DEBUG - 05/20/22 16:40:05 - 0:06:02 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:40:05 - 0:06:02 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:40:05 - 0:06:02 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:40:05 - 0:06:03 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:40:06 - 0:06:03 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+INFO - 05/20/22 16:46:05 - 0:12:02 - Train Loss: 0.0068
+INFO - 05/20/22 16:46:05 - 0:12:02 - Val: Loss: 0.05427 | F1: 0.78146 | Precision: 0.79808 | Recall: 0.76879 | Accuracy: 0.84701
+DEBUG - 05/20/22 16:46:06 - 0:12:03 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:46:06 - 0:12:03 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:46:06 - 0:12:03 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:46:07 - 0:12:04 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:46:07 - 0:12:04 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+INFO - 05/20/22 16:52:00 - 0:17:57 - Train Loss: 0.0059
+INFO - 05/20/22 16:52:00 - 0:17:57 - Val: Loss: 0.05734 | F1: 0.76778 | Precision: 0.80545 | Recall: 0.74561 | Accuracy: 0.84511
+DEBUG - 05/20/22 16:52:00 - 0:17:57 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:52:00 - 0:17:57 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:52:00 - 0:17:57 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:52:01 - 0:17:58 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:52:01 - 0:17:58 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+INFO - 05/20/22 16:57:44 - 0:23:41 - Train Loss: 0.0050
+INFO - 05/20/22 16:57:44 - 0:23:41 - Val: Loss: 0.06056 | F1: 0.77980 | Precision: 0.79102 | Recall: 0.77058 | Accuracy: 0.84369
+DEBUG - 05/20/22 16:57:44 - 0:23:41 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:57:45 - 0:23:42 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:57:45 - 0:23:42 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:57:45 - 0:23:42 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:57:45 - 0:23:42 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+INFO - 05/20/22 16:57:57 - 0:23:54 - No improvement. Breaking out of loop.
+INFO - 05/20/22 16:58:26 - 0:24:23 - Test: Loss: 0.05427 | F1: 0.78146 | Precision: 0.79808 | Recall: 0.76879 | Accuracy: 0.84701
+DEBUG - 05/20/22 16:58:26 - 0:24:23 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:58:26 - 0:24:23 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:58:27 - 0:24:24 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:58:27 - 0:24:24 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:58:27 - 0:24:24 - https://dagshub.com:443 "POST /Omdena/NYU.mlflow/api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 None
+DEBUG - 05/20/22 16:58:27 - 0:24:24 - https://dagshub.com:443 "GET /Omdena/NYU.mlflow/api/2.0/mlflow/runs/get?run_uuid=9fcd314151434a76a0ac6051604cbe01&run_id=9fcd314151434a76a0ac6051604cbe01 HTTP/1.1" 200 None
