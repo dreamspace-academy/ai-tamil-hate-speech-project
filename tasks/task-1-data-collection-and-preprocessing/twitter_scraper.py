@@ -6,73 +6,76 @@ import os
 
 # keywords
 
-KEYWORD = keyword  # insert keyword
+keywords = list()  # insert list of keywords
 
-os.system("snscrape --jsonl --progress --max-results 500 twitter-search KEYWORD > new_tweets.json")
+for i in keywords:
+    keyword = keywords[0]  # insert keyword
 
-df_new = pd.read_json('new_tweets.json', lines=True)
+    os.system("snscrape --jsonl --progress --max-results 500 twitter-search keyword > new_tweets.json")
 
-# import all_tweets
-'''
-this won't exist yet if this is 1st time running script. 
-if that's the case, comment out all lines related to df_all,
-and export df_new as all_tweets.json.
-then once we have that table, we can use this script as it is to buiold on all_tweets.json table.
-'''
+    df_new = pd.read_json('new_tweets.json', lines=True)
 
-df_all = pd.read_json('all_tweets.json')
+    # import all_tweets
+    '''
+    this won't exist yet if this is 1st time running script. 
+    if that's the case, comment out all lines related to df_all,
+    and export df_new as all_tweets.json.
+    then once we have that table, we can use this script as it is to buiold on all_tweets.json table.
+    '''
 
-# FEATURE ENGINEERING/SELECTION before concatenating & exporting
+    df_all = pd.read_json('all_tweets.json')
 
-df_new = df_new[['date', 'id', 'user', 'content', 'hashtags', 'mentionedUsers']]
+    # FEATURE ENGINEERING/SELECTION before concatenating & exporting
 
-# extract features from users col
-usernames = list()
-display_names = list()
-mentioned_usernames = list()
+    df_new = df_new[['date', 'id', 'user', 'content', 'hashtags', 'mentionedUsers']]
 
-for user in df_new['user']:
-    usernames.append(user['username'])
-    display_names.append(user['displayname'])
+    # extract features from users col
+    usernames = list()
+    display_names = list()
+    mentioned_usernames = list()
 
-'''
-# FIXME
-df_new['mentionedUsers'].fillna(0, inplace=True)
-for user in df_new['mentionedUsers']:
-    mentioned_usernames.append(user['username'])
-'''
+    for user in df_new['user']:
+        usernames.append(user['username'])
+        display_names.append(user['displayname'])
 
-df_new['username'] = usernames
-df_new['display_name'] = display_names
-# df_new['mentioned_usernames'] = mentioned_usernames
+    '''
+    # FIXME
+    df_new['mentionedUsers'].fillna(0, inplace=True)
+    for user in df_new['mentionedUsers']:
+        mentioned_usernames.append(user['username'])
+    '''
 
-'''
-# extracting mentioned usernames from mentionedUsers
-df_new['mentionedUsers'].fillna(0, inplace=True)
-mentioned_usernames = list()
-for i in range(len(df_new)):
-    mentions = list()
-    for mention in df_new['mentionedUsers'][i]:
-        if mention == 0:  #FIXME
-            mentions.append('none')
-        else:
-            mentions.append(mention['username'])
-    mentioned_usernames.append(mentions)
-    # print(mentions)
-'''
+    df_new['username'] = usernames
+    df_new['display_name'] = display_names
+    # df_new['mentioned_usernames'] = mentioned_usernames
 
-df_new['hashtags'] = df_new['hashtags'].fillna('none')
-# df_new['mentionedUsers'] = df_new['mentionedUsers'].fillna('none')
-df_new['id'] = df_new['id'].astype('str')
-df_new['date'] = df_new['date'].apply(lambda a: pd.to_datetime(a).date())
+    '''
+    # extracting mentioned usernames from mentionedUsers
+    df_new['mentionedUsers'].fillna(0, inplace=True)
+    mentioned_usernames = list()
+    for i in range(len(df_new)):
+        mentions = list()
+        for mention in df_new['mentionedUsers'][i]:
+            if mention == 0:  #FIXME
+                mentions.append('none')
+            else:
+                mentions.append(mention['username'])
+        mentioned_usernames.append(mentions)
+        # print(mentions)
+    '''
 
-# Append df_new to df_all
-df_all = df_all.append(df_new).reset_index(drop=True)
+    df_new['hashtags'] = df_new['hashtags'].fillna('none')
+    # df_new['mentionedUsers'] = df_new['mentionedUsers'].fillna('none')
+    df_new['id'] = df_new['id'].astype('str')
+    df_new['date'] = df_new['date'].apply(lambda a: pd.to_datetime(a).date())
 
-# drop duplicate rows based on a unique identifier column ('id')
-# len(df_all), len(df_all['id'].unique())
-df_all.drop_duplicates(subset=['id'], inplace=True)
-df_all.reset_index(drop=True, inplace=True)
+    # Append df_new to df_all
+    df_all = df_all.append(df_new).reset_index(drop=True)
 
-# export df_all as json
-df_all.to_json('all_tweets.json')
+    # drop duplicate rows based on a unique identifier column ('id')
+    # len(df_all), len(df_all['id'].unique())
+    df_all.drop_duplicates(subset=['id'], inplace=True)
+    df_all.reset_index(drop=True, inplace=True)
+
+    # export df_all as json
+    df_all.to_json('all_tweets.json')
