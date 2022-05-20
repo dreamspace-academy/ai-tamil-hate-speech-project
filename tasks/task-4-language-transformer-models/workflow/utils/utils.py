@@ -4,6 +4,7 @@ import random
 import shutil
 import os
 import mlflow
+from argparse import Namespace
 
 import torch
 import torch.nn as nn
@@ -41,6 +42,13 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+
+def namespace_to_dict(namespace):
+    return {
+        k: namespace_to_dict(v) if isinstance(v, Namespace) else v
+        for k, v in vars(namespace).items()
+    }
 
 
 def store_preds_to_disk(tgts, preds, args):
@@ -86,3 +94,9 @@ def load_checkpoint(model, path):
     best_checkpoint = torch.load(path)
     model.load_state_dict(best_checkpoint["state_dict"])
 
+
+def load_labels(path):
+    with open(path, "r") as f:
+        all_preds = f.readlines()
+    preds_processed = [[int(e) for e in pred.strip('\n').split()] for pred in all_preds]
+    return np.array(preds_processed)

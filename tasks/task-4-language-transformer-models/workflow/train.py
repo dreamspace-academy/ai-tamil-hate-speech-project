@@ -9,6 +9,7 @@ import torch.optim as optim
 
 from sklearn.metrics import (
     accuracy_score,
+    f1_score,
     precision_recall_fscore_support,
     confusion_matrix,
     classification_report,
@@ -33,7 +34,7 @@ def get_args():
     args.lr = 3e-5
     args.lr_patience = 1
     args.lr_factor = 0.5
-    args.es_patience = 4
+    args.es_patience = 2
     args.es_factor = 0.2
     args.gradient_accumulation_steps = 8
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -167,6 +168,7 @@ def model_forward(i_epoch, model, args, criterion, batch):
 def train(args):
     set_seed(args.seed)
     set_mlflow(args)
+    mlflow.log_params(namespace_to_dict(args))
     logger = create_logger("%s/logfile.log" % args.savedir, args)
     cuda_len = torch.cuda.device_count()
 
@@ -280,6 +282,15 @@ def train(args):
     mlflow.log_artifact(f"{args.task_name}/{args.model_path}/test_labels_pred.txt")
     mlflow.log_artifact(f"{args.task_name}/{args.model_path}/test_labels_gold.txt")
 
+    gold_preds = load_labels(f"{args.task_name}/{args.model_path}/test_labels_gold.txt")
+    model_preds = load_labels(f"{args.task_name}/{args.model_path}/test_labels_pred.txt")
+
+    cm = confusion_matrix(y_true=gold_preds, y_pred=model_preds)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=args.labels)
+    disp.plot()
+    mlflow.log_figure(disp.figure_, "Confusion matrix.png")
+    mlflow.end_run()
+    
 
 if __name__ == "__main__":
     args = get_args()
