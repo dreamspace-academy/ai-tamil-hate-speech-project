@@ -2,6 +2,7 @@ import os
 from argparse import Namespace
 from tqdm import tqdm
 import numpy as np
+import yaml
 
 import torch
 import torch.nn as nn
@@ -23,46 +24,13 @@ from utils.utils import *
 
 
 def get_args():
-    args = Namespace()
+    with open(r'params.yaml') as file:
+        args = yaml.load(file, Loader=yaml.FullLoader)
+    args = Namespace(**args)
 
-    # Training
-    args.use_binary_classification = True
-    args.seed = 1111
-    args.max_epochs = 10
-    args.batch_size = 16
-    args.num_workers = 2
-    args.lr = 3e-5
-    args.lr_patience = 1
-    args.lr_factor = 0.5
-    args.es_patience = 2
-    args.es_factor = 0.2
-    args.gradient_accumulation_steps = 8
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    args.tunning_metric = "F1"
-    args.use_fp16 = True
-    args.label_smoothing = 0.2
-    args.focal_gamma = 2
-    args.focal_alpha = 0.7
-    args.loss_type = ['smoothed_focal_bce', 'focal_bce', 'weighted_bce', 'smoothed_weighted_bce'][0]
-
-    # Modeling
-    #args.model_path = 'monsoon-nlp/tamillion'
-    #args.model_path = 'xlm-roberta-base'
-    #args.model_path = 'bert-base-multilingual-uncased'
-    args.model_path = "google/muril-base-cased"
-    #args.model_path = "distilbert-base-uncased"
-    args.hidden_size = 768
-
-    # Tokenizer
-    args.max_length = 256
-
-    # Evaluation
-    args.metric_name = "f1"
-    args.task_name = "hate_speech_binary_classification"
-
-    #args.savedir = f'/content/{args.task_name}'
-    args.savedir = os.path.join(os.getcwd(), args.task_name)
-    args.savedir = os.path.join(args.savedir, args.model_path)
+    savedir = os.path.join(os.getcwd(), args.task_name)
+    args.savedir = os.path.join(savedir, args.model_path)
     os.makedirs(args.savedir, exist_ok=True)
 
     return args

@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from collections import Counter
 import functools
+import os
 import pandas as pd
 from transformers import AutoTokenizer
 from .dataset import TamilDataset
@@ -41,22 +42,27 @@ def preprocess_corpus(data: pd.DataFrame, binary: bool=False):
 
 
 def load_datasets(args):
-    path = "/content/drive/MyDrive/DravidianCodeMix/"
+    data_path = os.path.join(os.path.dirname(os.getcwd()), 'data')
 
-    train_corpus = pd.read_csv(path+"tamil_offensive_full_train.csv", sep="\t", header=None)
+    train_data_path = os.path.join(data_path, args.train_filename)
+    train_corpus = pd.read_csv(train_data_path, sep=",", index_col=0)
     train_corpus.columns = ['text', 'label']
-
-    dev_corpus = pd.read_csv(path+"tamil_offensive_full_dev.csv", sep="\t", header=None).iloc[:, 0:2]
-    dev_corpus.columns = ['text', 'label']
-
-    test_corpus = pd.read_csv(path+"tamil_offensive_full_test.csv", sep="\t", header=None).iloc[:, 0:2]
-    test_corpus.columns = ['text', 'label']
-
     train_corpus = preprocess_corpus(train_corpus, binary=args.use_binary_classification)
-    dev_corpus = preprocess_corpus(dev_corpus, binary=args.use_binary_classification)
-    test_corpus = preprocess_corpus(test_corpus, binary=args.use_binary_classification)
 
-    return train_corpus, dev_corpus, test_corpus
+    dev_data_path = os.path.join(data_path, args.dev_filename)
+    dev_corpus = pd.read_csv(dev_data_path, sep=",", index_col=0)
+    dev_corpus.columns = ['text', 'label']
+    dev_corpus = preprocess_corpus(dev_corpus, binary=args.use_binary_classification)
+
+    if args.test_filename != "None":
+        test_data_path = os.path.join(data_path, args.test_filename)
+        test_corpus = pd.read_csv(test_data_path, sep=",", index_col=0)
+        test_corpus.columns = ['text', 'label']
+        test_corpus = preprocess_corpus(test_corpus, binary=args.use_binary_classification)
+        
+        return train_corpus, dev_corpus, test_corpus
+        
+    return train_corpus, dev_corpus, None
 
 
 def get_data_loaders(args):
@@ -67,9 +73,6 @@ def get_data_loaders(args):
     args.num_labels = len(args.labels)
 
     train_dataset = TamilDataset(train_corpus, tokenizer, args.labels, args.max_length)
-    val_dataset = TamilDataset(dev_corpus, tokenizer, args.labels, args.max_length)
-    test_dataset = TamilDataset(test_corpus, tokenizer, args.labels, args.max_length)
-
     args.train_data_len = len(train_corpus)
     #collate = functools.partial(collate_fn, args=args)
 
@@ -82,6 +85,7 @@ def get_data_loaders(args):
         drop_last=True,
     )
 
+    val_dataset = TamilDataset(dev_corpus, tokenizer, args.labels, args.max_length)
     val_loader = DataLoader(
         val_dataset,
         batch_size=args.batch_size,
@@ -90,12 +94,16 @@ def get_data_loaders(args):
         collate_fn=collate_fn,
     )
 
-    test_loader = DataLoader(
-        test_dataset,
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers,
-        collate_fn=collate_fn,
-    )
+    if test_corpus:
+        test_dataset = TamilDataset(test_corpus, tokenizer, args.labels, args.max_length)
+        test_loader = DataLoader(
+            test_dataset,
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=args.num_workers,
+            collate_fn=collate_fn,
+        )
 
-    return train_loader, val_loader, test_loader
+        return train_loader, val_loader, test_loader
+    
+    return train_loader, val_loader, None
