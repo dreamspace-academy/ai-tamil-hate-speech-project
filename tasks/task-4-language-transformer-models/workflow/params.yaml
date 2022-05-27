@@ -1,4 +1,4 @@
-use_binary_classification: True
+use_binary_classification: False
 seed: 1111
 max_epochs: 10
 batch_size: 16
@@ -24,7 +24,10 @@ model_path: "google/muril-base-cased"
 hidden_size: 768
 max_length: 256
 metric_name: "f1"
+
+# "hate-speech-homophobia", "hate-speech-movies"
+dataset: "hate-speech-homophobia"
 task_name: "hate_speech_binary_classification"
 train_filename: "hate-speech-homophobia/train_data.csv"
-dev_filename: "hate-speech-homophobia/test_data.csv"
-test_filename: None
+dev_filename: "hate-speech-homophobia/dev_data.csv"
+test_filename: "hate-speech-homophobia/test_data.csv"

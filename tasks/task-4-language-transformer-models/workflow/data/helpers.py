@@ -47,18 +47,21 @@ def load_datasets(args):
     train_data_path = os.path.join(data_path, args.train_filename)
     train_corpus = pd.read_csv(train_data_path, sep=",", index_col=0)
     train_corpus.columns = ['text', 'label']
-    train_corpus = preprocess_corpus(train_corpus, binary=args.use_binary_classification)
+    if args.dataset == 'hate-speech-movies':
+        train_corpus = preprocess_corpus(train_corpus, binary=args.use_binary_classification)
 
     dev_data_path = os.path.join(data_path, args.dev_filename)
     dev_corpus = pd.read_csv(dev_data_path, sep=",", index_col=0)
     dev_corpus.columns = ['text', 'label']
-    dev_corpus = preprocess_corpus(dev_corpus, binary=args.use_binary_classification)
+    if args.dataset == 'hate-speech-movies':
+        dev_corpus = preprocess_corpus(dev_corpus, binary=args.use_binary_classification)
 
     if args.test_filename != "None":
         test_data_path = os.path.join(data_path, args.test_filename)
         test_corpus = pd.read_csv(test_data_path, sep=",", index_col=0)
         test_corpus.columns = ['text', 'label']
-        test_corpus = preprocess_corpus(test_corpus, binary=args.use_binary_classification)
+        if args.dataset == 'hate-speech-movies':
+            test_corpus = preprocess_corpus(test_corpus, binary=args.use_binary_classification)
         
         return train_corpus, dev_corpus, test_corpus
         
