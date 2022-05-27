@@ -29,8 +29,8 @@ def get_args():
     args = Namespace(**args)
 
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    savedir = os.path.join(os.getcwd(), args.task_name)
-    args.savedir = os.path.join(savedir, args.model_path)
+    args.savedir = os.path.join(os.getcwd(), "model_artifacts")
+    #args.savedir = os.path.join(savedir, args.model_path)
     os.makedirs(args.savedir, exist_ok=True)
 
     return args
@@ -247,11 +247,11 @@ def train(args):
     log_metrics(f"Test", global_step, test_metrics, args, logger)
 
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
-    mlflow.log_artifact(f"{args.task_name}/{args.model_path}/test_labels_pred.txt")
-    mlflow.log_artifact(f"{args.task_name}/{args.model_path}/test_labels_gold.txt")
+    mlflow.log_artifact(f"{args.savedir}/test_labels_pred.txt")
+    mlflow.log_artifact(f"{args.savedir}/test_labels_gold.txt")
 
-    gold_preds = load_labels(f"{args.task_name}/{args.model_path}/test_labels_gold.txt")
-    model_preds = load_labels(f"{args.task_name}/{args.model_path}/test_labels_pred.txt")
+    gold_preds = load_labels(f"{args.savedir}/test_labels_gold.txt")
+    model_preds = load_labels(f"{args.savedir}/test_labels_pred.txt")
 
     cm = confusion_matrix(y_true=gold_preds, y_pred=model_preds)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=args.labels)

@@ -37,7 +37,7 @@ def create_logger(filepath, args):
     # create logger and set level to debug
     logger = logging.getLogger()
     logger.handlers = []
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     logger.propagate = False
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
