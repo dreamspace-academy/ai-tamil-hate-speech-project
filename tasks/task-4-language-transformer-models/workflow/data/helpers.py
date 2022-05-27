@@ -97,7 +97,7 @@ def get_data_loaders(args):
         collate_fn=collate_fn,
     )
 
-    if test_corpus:
+    if test_corpus is not None:
         test_dataset = TamilDataset(test_corpus, tokenizer, args.labels, args.max_length)
         test_loader = DataLoader(
             test_dataset,

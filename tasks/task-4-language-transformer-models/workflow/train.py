@@ -243,7 +243,7 @@ def train(args):
     load_checkpoint(model, os.path.join(args.savedir, "model_best.pt"))
     model.eval()
 
-    test_metrics = model_eval(np.inf, val_loader, "Validation", model, args, criterion, store_preds=True)
+    test_metrics = model_eval(np.inf, test_loader, "Test", model, args, criterion, store_preds=True)
     log_metrics(f"Test", global_step, test_metrics, args, logger)
 
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
