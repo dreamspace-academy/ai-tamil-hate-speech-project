@@ -1,0 +1,33 @@
+schema: '2.0'
+stages:
+  train_eval:
+    cmd: python train.py
+    deps:
+    - path: ../data/hate-speech-homophobia/dev_data.csv
+      md5: c908b2c85ee2b44d9af0b1d2ae2cad6c
+      size: 108838
+    - path: ../data/hate-speech-homophobia/test_data.csv
+      md5: 314e0d1a0d67ebb3370e8d47c1584400
+      size: 97534
+    - path: ../data/hate-speech-homophobia/train_data.csv
+      md5: 8faa7f3fc4a6b356ecb2026dee599fda
+      size: 904786
+    - path: params.yaml
+      md5: a921876a8e6fa17726549ecde941e17e
+      size: 902
+    outs:
+    - path: model_artifacts/args.pt
+      md5: 260561c82688e636259f1664a862c31a
+      size: 1583
+    - path: model_artifacts/model_best.pt
+      md5: 7667cae580683a972c1ee6afac2f5e9d
+      size: 2853299763
+    - path: model_artifacts/test_labels.txt
+      md5: c8d142bb53e8cf028c0ece71670b1907
+      size: 45
+    - path: model_artifacts/test_labels_gold.txt
+      md5: 23ccf8aca7d991577c8827023d1d4285
+      size: 663
+    - path: model_artifacts/test_labels_pred.txt
+      md5: d2d0ca14d3688bdeb899e597daef0820
+      size: 663
