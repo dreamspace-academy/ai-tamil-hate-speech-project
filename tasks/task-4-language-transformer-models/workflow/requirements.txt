@@ -1,5 +1,3 @@
 transformers==4.19.2
 mlflow==1.26.0
 pyaml==21.10.1
-dvc
-fastds
