@@ -32,6 +32,8 @@ posts from YouTube
 
 [dataset in google Drive](https://drive.google.com/drive/folders/12ACbgg0SVIdYuKYsocp_FRIVxBxZZru_)
 
+[dataset in google Drive 2](https://drive.google.com/drive/folders/1ahcrqrj4O8ZtTTs6FP2lzo9A74rrO4ms)
+
 
 ## Models and libraries
 
