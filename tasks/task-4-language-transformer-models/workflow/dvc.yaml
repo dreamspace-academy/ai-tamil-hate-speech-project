@@ -6,6 +6,7 @@ stages:
     - ../data/hate-speech-homophobia/test_data.csv
     - ../data/hate-speech-homophobia/train_data.csv
     - params.yaml
+    - train.py
     outs:
     - model_artifacts/args.pt
     - model_artifacts/model_best.pt
