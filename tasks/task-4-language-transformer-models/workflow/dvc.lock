@@ -13,18 +13,18 @@ stages:
       md5: 8faa7f3fc4a6b356ecb2026dee599fda
       size: 904786
     - path: params.yaml
-      md5: e6ebea6ef5dfaab15a30a564a9037a8e
-      size: 901
+      md5: 6571f3f8c0e738b6e9f71dcfad31d744
+      size: 839
     - path: train.py
-      md5: 248b1ee1af6a744248c72c3fa2dfaafb
-      size: 8855
+      md5: b69d13dc2b8e3a38a0cd10bc1c4c446e
+      size: 9921
     outs:
     - path: model_artifacts/args.pt
-      md5: b1357d8812ea42616630d7a13eee1c7b
-      size: 1583
+      md5: 2eaba96db6c8e07e14cb3cc31cfae2c9
+      size: 1519
     - path: model_artifacts/model_best.pt
-      md5: bb8568c1b91962d0e77752ee81ed829e
-      size: 2853290547
+      md5: 17f436d9f227b3cab6df82038a0322ea
+      size: 2853281331
     - path: model_artifacts/test_labels.txt
       md5: 72cf4d8023dc267d0ba0d192bf69f769
       size: 27
@@ -32,5 +32,5 @@ stages:
       md5: 7b2877c64ddbd7a75a865d29144168a4
       size: 663
     - path: model_artifacts/test_labels_pred.txt
-      md5: 0560350d660c11f8530ba28df0235f8e
-      size: 663
+      md5: 09b996f58ffda4941a604df5ac527953
+      size: 1327
