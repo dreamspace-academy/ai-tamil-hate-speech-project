@@ -13,3 +13,4 @@ stages:
     - model_artifacts/test_labels.txt
     - model_artifacts/test_labels_gold.txt
     - model_artifacts/test_labels_pred.txt
+    - model_artifacts/test_labels_prob_pred.txt

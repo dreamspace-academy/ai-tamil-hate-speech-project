@@ -66,7 +66,6 @@ def get_criterion(args):
         )
     elif args.loss_type == 'weighted_ce':
         if args.num_labels == 2:
-            print(f"Lavel weights: {label_weights}")
             criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([label_weights[1]]).to(args.device))
         else:
             criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(label_weights).to(args.device))
@@ -266,6 +265,7 @@ def train(args):
             },
             is_improvement,
             args.savedir,
+            logger=logger
         )
 
         if n_no_improve >= args.es_patience:

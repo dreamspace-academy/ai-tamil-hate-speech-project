@@ -3,3 +3,4 @@
 /test_labels.txt
 /test_labels_gold.txt
 /test_labels_pred.txt
+/test_labels_prob_pred.txt

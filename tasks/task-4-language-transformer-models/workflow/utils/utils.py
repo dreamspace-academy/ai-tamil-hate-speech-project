@@ -90,10 +90,11 @@ def append_metrics(metrics_history, metrics):
         metrics_history[metric_name].append(metrics[metric_name])
 
 
-def save_checkpoint(state, is_best, checkpoint_path, filename="checkpoint.pt"):
+def save_checkpoint(state, is_best, checkpoint_path, filename="checkpoint.pt", logger=None):
     filename = os.path.join(checkpoint_path, filename)
     torch.save(state, filename)
     if is_best:
+        logger.info(f"Updating best model in epoch {state['epoch']} with metric value: {state['best_metric']}")
         shutil.copyfile(filename, os.path.join(checkpoint_path, "model_best.pt"))
 
 
