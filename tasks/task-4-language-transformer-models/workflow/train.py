@@ -66,7 +66,8 @@ def get_criterion(args):
         )
     elif args.loss_type == 'weighted_ce':
         if args.num_labels == 2:
-            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor(label_weights).to(args.device))
+            print(f"Lavel weights: {label_weights}")
+            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([label_weights[1]]).to(args.device))
         else:
             criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(label_weights).to(args.device))
     elif args.loss_type == 'smoothed_weighted_ce' and args.num_labels > 2:
