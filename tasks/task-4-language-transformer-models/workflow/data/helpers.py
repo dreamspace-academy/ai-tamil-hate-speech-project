@@ -34,17 +34,9 @@ def get_labels_and_frequencies(train_dataset):
     return list(label_freqs.keys()), label_freqs
 
 
-def preprocess_corpus(data: pd.DataFrame, binary: bool=False):
-    data = data[data['label'] != 'not-Tamil']
-    if binary:
-        data.loc[data['label'].str.contains('Offensive'), 'label'] = 'Offensive'
-    return data
-
-
-def preprocess_homophobia_corpus(data: pd.DataFrame, binary: bool=False):
-    if binary:
-        data.loc[data['label'].str.contains('phobic'), 'label'] = 'Hate-Speech'
-        data.loc[data['label'] != 'Hate-Speech', 'label'] = 'Non-Hate-Speech'
+def preprocess_homophobia_corpus(data: pd.DataFrame):
+    data.loc[data['label'].str.contains('phobic'), 'label'] = 'Hate-Speech'
+    data.loc[data['label'] != 'Hate-Speech', 'label'] = 'Non-Hate-Speech'
     return data
 
 
@@ -54,29 +46,18 @@ def load_datasets(args):
     train_data_path = os.path.join(data_path, args.train_filename)
     train_corpus = pd.read_csv(train_data_path, sep=",", index_col=0)
     train_corpus.columns = ['text', 'label']
-    if args.dataset == 'hate-speech-movies':
-        train_corpus = preprocess_corpus(train_corpus, binary=args.use_binary_classification)
-    elif args.dataset == 'hate-speech-homophobia':
-        train_corpus = preprocess_homophobia_corpus(train_corpus, binary=args.use_binary_classification)
+    train_corpus = preprocess_homophobia_corpus(train_corpus)
 
     dev_data_path = os.path.join(data_path, args.dev_filename)
     dev_corpus = pd.read_csv(dev_data_path, sep=",", index_col=0)
     dev_corpus.columns = ['text', 'label']
-    if args.dataset == 'hate-speech-movies':
-        dev_corpus = preprocess_corpus(dev_corpus, binary=args.use_binary_classification)
-    elif args.dataset == 'hate-speech-homophobia':
-        train_corpus = preprocess_homophobia_corpus(dev_corpus, binary=args.use_binary_classification)
-
+    dev_corpus = preprocess_homophobia_corpus(dev_corpus)
 
     if args.test_filename != "None":
         test_data_path = os.path.join(data_path, args.test_filename)
         test_corpus = pd.read_csv(test_data_path, sep=",", index_col=0)
         test_corpus.columns = ['text', 'label']
-        if args.dataset == 'hate-speech-movies':
-            test_corpus = preprocess_corpus(test_corpus, binary=args.use_binary_classification)
-        elif args.dataset == 'hate-speech-homophobia':
-            train_corpus = preprocess_homophobia_corpus(test_corpus, binary=args.use_binary_classification)
-
+        test_corpus = preprocess_homophobia_corpus(test_corpus)
 
         return train_corpus, dev_corpus, test_corpus
         

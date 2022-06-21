@@ -39,23 +39,37 @@ def get_args():
 def get_criterion(args):
     freqs = [args.label_freqs[l] for l in args.labels]
     label_weights = (np.array(freqs) / args.train_data_len) ** -1
-    if args.loss_type == 'focal_bce':
+
+    if args.loss_type == 'focal_ce':
+        if args.num_labels == 2:
+            cross_entropy_fn = nn.BCEWithLogitsLoss()
+        else:
+            cross_entropy_fn = nn.CrossEntropyLoss()
         criterion = FocalLoss(
             alpha=args.focal_alpha,
             gamma=args.focal_gamma,
+            cross_entropy_fn=cross_entropy_fn,
+            num_labels=args.num_labels,
         )
-    elif args.loss_type == 'smoothed_focal_bce':
-        criterion = FocalLoss(
-            alpha=args.focal_alpha,
-            gamma=args.focal_gamma,
+    elif args.loss_type == 'smoothed_focal_ce' and args.num_labels > 2:
+        cross_entropy_fn = nn.CrossEntropyLoss(
             label_smoothing=args.label_smoothing,
             size_average=None, 
             ignore_index=-100,
             reduction='mean',
         )
-    elif args.loss_type == 'weighted_bce':
-        criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(label_weights).to(args.device))
-    elif args.loss_type == 'smoothed_weighted_bce':
+        criterion = FocalLoss(
+            alpha=args.focal_alpha,
+            gamma=args.focal_gamma,
+            cross_entropy_fn=cross_entropy_fn,
+            num_labels=args.num_labels,
+        )
+    elif args.loss_type == 'weighted_ce':
+        if args.num_labels == 2:
+            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor(label_weights).to(args.device))
+        else:
+            criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(label_weights).to(args.device))
+    elif args.loss_type == 'smoothed_weighted_ce' and args.num_labels > 2:
         criterion = nn.CrossEntropyLoss(
             weight=torch.FloatTensor(label_weights).to(args.device),
             size_average=None, 
@@ -64,7 +78,10 @@ def get_criterion(args):
             label_smoothing=args.label_smoothing
         )
     else:
-        criterion = nn.CrossEntropyLoss()
+        if args.num_labels == 2:
+            criterion = nn.BCEWithLogitsLoss()
+        else:
+            criterion = nn.CrossEntropyLoss()
     
     return criterion
 
@@ -87,12 +104,17 @@ def get_scheduler(optimizer, args):
 
 def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store_preds=False):
     with torch.no_grad():
-        losses, preds, tgts = [], [], []
+        losses, preds, prob_preds, tgts = [], [], [], []
         for batch in data:
             loss, out, tgt = model_forward(i_epoch, model, args, criterion, batch)
             losses.append(loss.item())
 
-            pred = torch.nn.functional.softmax(out, dim=1).argmax(dim=1).cpu().detach().numpy()
+            if args.num_labels == 2:
+                out_probs = torch.sigmoid(out).cpu().detach().numpy()
+                prob_preds.append(out_probs)
+                pred = np.where(out_probs > 0.5, 1, 0)
+            else:
+                pred = torch.nn.functional.softmax(out, dim=1).argmax(dim=1).cpu().detach().numpy()
             preds.append(pred)
             
             tgt = tgt.cpu().detach().numpy()
@@ -109,7 +131,10 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
     metrics["F1"] = precision_recall_f1score_metric[2]
     
     if store_preds:
-        store_preds_to_disk(tgts, preds, args)
+        if args.num_labels == 2:
+            store_preds_to_disk(tgts, preds, prob_preds, args)
+        else:
+            store_preds_to_disk(tgts, preds, args)
 
     return metrics
 
@@ -125,10 +150,16 @@ def model_forward(i_epoch, model, args, criterion, batch):
     if args.use_fp16:
         with torch.cuda.amp.autocast():
             out = model(txt, mask, segment)
-            loss = criterion(out, tgt)
+            if args.num_labels == 2:
+                loss = criterion(out, torch.unsqueeze(tgt.type_as(out), 1))
+            else:
+                loss = criterion(out, tgt)
     else:
         out = model(txt, mask, segment)
-        loss = criterion(out, tgt)
+        if args.num_labels == 2:
+            loss = criterion(out, torch.unsqueeze(tgt.type_as(out), 1))
+        else:
+            loss = criterion(out, tgt)
 
     return loss, out, tgt
 
@@ -248,15 +279,9 @@ def train(args):
 
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
     mlflow.log_artifact(f"{args.savedir}/test_labels_pred.txt")
+    mlflow.log_artifact(f"{args.savedir}/test_labels_prob_pred.txt")
     mlflow.log_artifact(f"{args.savedir}/test_labels_gold.txt")
 
-    gold_preds = load_labels(f"{args.savedir}/test_labels_gold.txt")
-    model_preds = load_labels(f"{args.savedir}/test_labels_pred.txt")
-
-    cm = confusion_matrix(y_true=gold_preds, y_pred=model_preds)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=args.labels)
-    disp.plot()
-    mlflow.log_figure(disp.figure_, "Confusion matrix.png")
     mlflow.end_run()
     
 

@@ -11,15 +11,19 @@ import torch.nn as nn
 
 
 class FocalLoss(nn.Module):
-    def __init__(self, alpha=1, gamma=2, weight=None, **kwargs):
+    def __init__(self, alpha=1, gamma=2, cross_entropy_fn=None, num_labels=2):
         super(FocalLoss, self).__init__()
         self.alpha = alpha
         self.gamma = gamma
-        self.bce = nn.CrossEntropyLoss(weight=weight, **kwargs)
+        self.cross_entropy_fn = cross_entropy_fn
+        self.num_labels = num_labels
 
     def forward(self, inputs, targets):
-        bce_loss = self.bce(inputs,  targets)
-        loss = self.alpha * (1 - torch.exp(-bce_loss)) ** self.gamma * bce_loss
+        if self.num_labels == 2:
+            ce_loss = self.bce(inputs, targets)
+        else:
+            ce_loss = self.cross_entropy_fn(inputs,  targets)
+        loss = self.alpha * (1 - torch.exp(-ce_loss)) ** self.gamma * ce_loss
         return loss
 
 
@@ -51,9 +55,12 @@ def namespace_to_dict(namespace):
     }
 
 
-def store_preds_to_disk(tgts, preds, args):
+def store_preds_to_disk(tgts, preds, prob_preds=None, args=None):
     with open(os.path.join(args.savedir, "test_labels_pred.txt"), "w") as fw:
         fw.write("\n".join([str(x) for x in preds]))
+    if prob_preds:
+        with open(os.path.join(args.savedir, "test_labels_prob_pred.txt"), "w") as fw:
+            fw.write("\n".join([str(x) for x in prob_preds]))
     with open(os.path.join(args.savedir, "test_labels_gold.txt"), "w") as fw:
         fw.write("\n".join([str(x) for x in tgts]))
     with open(os.path.join(args.savedir, "test_labels.txt"), "w") as fw:

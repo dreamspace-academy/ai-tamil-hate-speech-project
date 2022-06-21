@@ -32,6 +32,7 @@ class TxtEncoder(nn.Module):
 class SentClf(nn.Module):
     def __init__(self, args):
         super(SentClf, self).__init__()
+        num_outputs = 1 if args.num_labels == 2 else args.num_labels
         self.args = args
         self.enc = TxtEncoder(args)
         self.clf = nn.Sequential(
@@ -39,7 +40,7 @@ class SentClf(nn.Module):
             nn.BatchNorm1d(args.hidden_size),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(args.hidden_size, args.num_labels)
+            nn.Linear(args.hidden_size, num_outputs)
         )
 
     def forward(self, txt, mask, segment=None):
