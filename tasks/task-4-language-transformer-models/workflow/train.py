@@ -14,7 +14,9 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
     confusion_matrix,
     classification_report,
-    ConfusionMatrixDisplay
+    ConfusionMatrixDisplay,
+    PrecisionRecallDisplay,
+    precision_recall_curve
 )
 
 from data.helpers import get_data_loaders
@@ -132,9 +134,12 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
     
     if store_preds:
         if args.num_labels == 2:
-            store_preds_to_disk(tgts, preds, prob_preds, args)
+            display = PrecisionRecallDisplay.from_predictions(y_true=tgts, y_pred=prob_preds)
+            display.figure_.savefig(os.path.join(args.savedir, 'pr_curve.png'))
+            pr_values = precision_recall_curve(y_true=tgts, probas_pred=prob_preds)
+            store_preds_to_disk(args, tgts, preds, prob_preds, pr_values)
         else:
-            store_preds_to_disk(tgts, preds, args)
+            store_preds_to_disk(args, tgts, preds)
 
     return metrics
 
@@ -256,7 +261,7 @@ def train(args):
     load_checkpoint(model, os.path.join(args.savedir, "model_best.pt"))
     model.eval()
 
-    test_metrics = model_eval(np.inf, test_loader, "Test", model, args, criterion, store_preds=True)
+    test_metrics = model_eval(np.inf, val_loader, "Test", model, args, criterion, store_preds=True)
     log_metrics(f"Test", global_step, test_metrics, args, logger)
 
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
