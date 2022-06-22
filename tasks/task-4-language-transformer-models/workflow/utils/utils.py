@@ -94,13 +94,12 @@ def save_checkpoint(state, is_best, checkpoint_path, filename="checkpoint.pt", l
     filename = os.path.join(checkpoint_path, filename)
     torch.save(state, filename)
     if is_best:
-        logger.info(f"Updating best model in epoch {state['epoch']} with metric value: {state['best_metric']}")
         shutil.copyfile(filename, os.path.join(checkpoint_path, "model_best.pt"))
 
 
 def load_checkpoint(model, path):
     best_checkpoint = torch.load(path)
-    model.load_state_dict(best_checkpoint["state_dict"])
+    model.load_state_dict(best_checkpoint)
 
 
 def load_labels(path):

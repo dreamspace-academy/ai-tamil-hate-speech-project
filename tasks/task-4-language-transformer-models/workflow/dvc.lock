@@ -16,15 +16,15 @@ stages:
       md5: 6571f3f8c0e738b6e9f71dcfad31d744
       size: 839
     - path: train.py
-      md5: dd775c1820bb1e67983afc61b6a1954f
-      size: 9908
+      md5: 1a20cc184a8e8ae74a5aa1067e539b15
+      size: 9173
     outs:
     - path: model_artifacts/args.pt
       md5: bd14f4aea4102fb1d76c051def447edb
       size: 1455
     - path: model_artifacts/model_best.pt
-      md5: e8cf650554962f59670d390013ef0b8d
-      size: 2853281331
+      md5: 16dc0993ac3519cedb4a7941e7770b70
+      size: 952692063
     - path: model_artifacts/test_labels.txt
       md5: 082a78d441858cf6a4dae65f8c1e8ee2
       size: 27

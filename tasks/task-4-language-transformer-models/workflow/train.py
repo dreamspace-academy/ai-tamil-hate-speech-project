@@ -197,18 +197,6 @@ def train(args):
     }
     train_loss = []
 
-    if os.path.exists(os.path.join(args.savedir, "checkpoint.pt")):
-        checkpoint = torch.load(os.path.join(args.savedir, "checkpoint.pt"))
-        start_epoch = checkpoint["epoch"]
-        n_no_improve = checkpoint["n_no_improve"]
-        best_metric = checkpoint["best_metric"]
-        model_dict = model.state_dict()
-        model_dict.update(checkpoint["state_dict"]) 
-        model.load_state_dict(model_dict)
-        model.load_state_dict(checkpoint["state_dict"])
-        optimizer.load_state_dict(checkpoint["optimizer"])
-        scheduler.load_state_dict(checkpoint["scheduler"])
-
     if args.use_fp16:
         scaler = torch.cuda.amp.GradScaler()
 
@@ -255,14 +243,7 @@ def train(args):
             n_no_improve += 1
 
         save_checkpoint(
-            {
-                "epoch": i_epoch + 1,
-                "state_dict": model.state_dict(),
-                "optimizer": optimizer.state_dict(),
-                "scheduler": scheduler.state_dict(),
-                "n_no_improve": n_no_improve,
-                "best_metric": best_metric,
-            },
+            model.state_dict(),
             is_improvement,
             args.savedir,
             logger=logger
