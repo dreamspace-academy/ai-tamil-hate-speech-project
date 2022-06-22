@@ -16,30 +16,27 @@ stages:
       md5: 6571f3f8c0e738b6e9f71dcfad31d744
       size: 839
     - path: train.py
-      md5: d48660b34b5c50f6e297432b0e03ac42
+      md5: 27df35888459ee00a39f31384aabfb45
       size: 9356
     outs:
     - path: model_artifacts/args.pt
-      md5: bd14f4aea4102fb1d76c051def447edb
-      size: 1455
+      md5: 2eaba96db6c8e07e14cb3cc31cfae2c9
+      size: 1519
     - path: model_artifacts/model_best.pt
-      md5: 16dc0993ac3519cedb4a7941e7770b70
+      md5: cc054b3d3525d8773b44aa5459f9abea
       size: 952692063
-    - path: model_artifacts/pr_curve.png
-      md5: 89a6743e0b70c9470ad3610d700f7282
-      size: 24458
     - path: model_artifacts/test_labels.txt
-      md5: 082a78d441858cf6a4dae65f8c1e8ee2
+      md5: 72cf4d8023dc267d0ba0d192bf69f769
       size: 27
     - path: model_artifacts/test_labels_gold.txt
-      md5: b46063ec729a4b23151413f9a5edb22f
+      md5: b26c2e8176e929ce01acc9aba26dc012
       size: 663
     - path: model_artifacts/test_labels_pred.txt
-      md5: cee85c834df8ab27e0af878591fbfa87
+      md5: 2c43c2e7cf022bef566047a99f95927b
       size: 1327
     - path: model_artifacts/test_labels_prob_pred.txt
-      md5: f98880783b27110ba39d176c0b181c3a
-      size: 4807
+      md5: cb5a68d3c08841d993a12eae69644e46
+      size: 5328
     - path: model_artifacts/test_pr_values.txt
-      md5: 3f5aab16c2f53d8aadf921ab09633499
-      size: 8763
+      md5: 8231dc8cbb9b091ab612cbb4a5172944
+      size: 7720

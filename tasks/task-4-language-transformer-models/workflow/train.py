@@ -114,7 +114,7 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
             if args.num_labels == 2:
                 out_probs = torch.sigmoid(out).cpu().detach().numpy()
                 prob_preds.extend(out_probs[:,0].tolist())
-                pred = np.where(out_probs > 0.5, 1, 0)
+                pred = np.where(out_probs > 0.4, 1, 0)
             else:
                 pred = torch.nn.functional.softmax(out, dim=1).argmax(dim=1).cpu().detach().numpy()
             preds.append(pred)

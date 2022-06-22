@@ -31,7 +31,7 @@ def collate_fn(batch):
 
 def get_labels_and_frequencies(train_dataset):
     label_freqs = Counter(train_dataset['label'].tolist())
-    return list(label_freqs.keys()), label_freqs
+    return ['Non-Hate-Speech', 'Hate-Speech'], label_freqs
 
 
 def preprocess_homophobia_corpus(data: pd.DataFrame):
