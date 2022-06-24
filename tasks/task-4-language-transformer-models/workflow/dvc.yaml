@@ -1,12 +1,12 @@
 stages:
   train_eval:
-    cmd: python train.py
+    cmd: python train_eval.py
     deps:
     - ../data/hate-speech-homophobia/dev_data.csv
     - ../data/hate-speech-homophobia/test_data.csv
     - ../data/hate-speech-homophobia/train_data.csv
     - params.yaml
-    - train.py
+    - train_eval.py
     outs:
     - model_artifacts/args.pt
     - model_artifacts/model_best.pt
