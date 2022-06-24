@@ -8,23 +8,20 @@ lr_factor: 0.5
 es_patience: 3
 gradient_accumulation_steps: 8
 tunning_metric: "Recall"
+loss_type: ce
 use_fp16: True
 label_smoothing: 0.2
-focal_gamma: 2
-focal_alpha: 0.7
-
-# 'smoothed_focal_bce', 'focal_bce', 'weighted_bce', 'smoothed_weighted_bce'
-loss_type: "weighted_ce"
-
-# 'monsoon-nlp/tamillion', 'xlm-roberta-base', 'bert-base-multilingual-uncased', 'google/muril-base-cased', 'distilbert-base-uncased'
-model_path: "google/muril-base-cased"
-
 hidden_size: 768
 max_length: 256
 
-# "hate-speech-homophobia", "hate-speech-movies"
-dataset: "hate-speech-homophobia"
+# Model selection
+# 'monsoon-nlp/tamillion', 'xlm-roberta-base', 'bert-base-multilingual-uncased', 'google/muril-base-cased', 'distilbert-base-uncased'
+model_path: "google/muril-base-cased"
+
+# Dataset params
 task_name: "hate_speech_binary_classification"
+dataset: "hate-speech-homophobia"
+labels: ['Non-Hate-Speech', 'Hate-Speech']
 train_filename: "hate-speech-homophobia/train_data.csv"
 dev_filename: "hate-speech-homophobia/dev_data.csv"
 test_filename: "hate-speech-homophobia/test_data.csv"

@@ -29,9 +29,9 @@ def collate_fn(batch):
     return text_tensor, segment_tensor, mask_tensor, tgt_tensor
 
 
-def get_labels_and_frequencies(train_dataset):
+def get_labels_frequencies(train_dataset):
     label_freqs = Counter(train_dataset['label'].tolist())
-    return ['Non-Hate-Speech', 'Hate-Speech'], label_freqs
+    return label_freqs
 
 
 def preprocess_homophobia_corpus(data: pd.DataFrame):
@@ -68,7 +68,7 @@ def get_data_loaders(args):
     tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
 
     train_corpus, dev_corpus, test_corpus = load_datasets(args)
-    args.labels, args.label_freqs = get_labels_and_frequencies(train_corpus)
+    args.label_freqs = get_labels_frequencies(train_corpus)
     args.num_labels = len(args.labels)
 
     train_dataset = TamilDataset(train_corpus, tokenizer, args.labels, args.max_length)

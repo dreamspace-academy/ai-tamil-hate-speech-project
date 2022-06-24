@@ -32,7 +32,6 @@ def get_args():
 
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     args.savedir = os.path.join(os.getcwd(), "model_artifacts")
-    #args.savedir = os.path.join(savedir, args.model_path)
     os.makedirs(args.savedir, exist_ok=True)
 
     return args
@@ -42,31 +41,7 @@ def get_criterion(args):
     freqs = [args.label_freqs[l] for l in args.labels]
     label_weights = (np.array(freqs) / args.train_data_len) ** -1
 
-    if args.loss_type == 'focal_ce':
-        if args.num_labels == 2:
-            cross_entropy_fn = nn.BCEWithLogitsLoss()
-        else:
-            cross_entropy_fn = nn.CrossEntropyLoss()
-        criterion = FocalLoss(
-            alpha=args.focal_alpha,
-            gamma=args.focal_gamma,
-            cross_entropy_fn=cross_entropy_fn,
-            num_labels=args.num_labels,
-        )
-    elif args.loss_type == 'smoothed_focal_ce' and args.num_labels > 2:
-        cross_entropy_fn = nn.CrossEntropyLoss(
-            label_smoothing=args.label_smoothing,
-            size_average=None, 
-            ignore_index=-100,
-            reduction='mean',
-        )
-        criterion = FocalLoss(
-            alpha=args.focal_alpha,
-            gamma=args.focal_gamma,
-            cross_entropy_fn=cross_entropy_fn,
-            num_labels=args.num_labels,
-        )
-    elif args.loss_type == 'weighted_ce':
+    if args.loss_type == 'weighted_ce':
         if args.num_labels == 2:
             criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([label_weights[1]]).to(args.device))
         else:
