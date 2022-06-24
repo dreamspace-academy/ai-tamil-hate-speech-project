@@ -10,23 +10,6 @@ import torch
 import torch.nn as nn
 
 
-class FocalLoss(nn.Module):
-    def __init__(self, alpha=1, gamma=2, cross_entropy_fn=None, num_labels=2):
-        super(FocalLoss, self).__init__()
-        self.alpha = alpha
-        self.gamma = gamma
-        self.cross_entropy_fn = cross_entropy_fn
-        self.num_labels = num_labels
-
-    def forward(self, inputs, targets):
-        if self.num_labels == 2:
-            ce_loss = self.bce(inputs, targets)
-        else:
-            ce_loss = self.cross_entropy_fn(inputs,  targets)
-        loss = self.alpha * (1 - torch.exp(-ce_loss)) ** self.gamma * ce_loss
-        return loss
-
-
 def set_mlflow(args):
     MLFLOW_TRACKING_URI = os.environ['MLFLOW_TRACKING_URI']
     MLFLOW_TRACKING_USERNAME = os.environ['MLFLOW_TRACKING_USERNAME']

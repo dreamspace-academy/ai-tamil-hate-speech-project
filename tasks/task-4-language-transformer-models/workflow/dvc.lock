@@ -40,3 +40,44 @@ stages:
     - path: model_artifacts/test_pr_values.txt
       md5: 01b552a7b5072d2a173279403ede5812
       size: 7131
+  train_k_fold:
+    cmd: python train_k_fold.py
+    deps:
+    - path: ../data/hate-speech-homophobia/train_data.csv
+      md5: 8faa7f3fc4a6b356ecb2026dee599fda
+      size: 904786
+    - path: train_k_fold.py
+      md5: e9c6748695b46b62b1ae30862412bac1
+      size: 10753
+    params:
+      params.yaml:
+        batch_size: 16
+        class_threshold: 0.2
+        dataset: hate-speech-homophobia
+        dev_filename: hate-speech-homophobia/dev_data.csv
+        es_patience: 3
+        gradient_accumulation_steps: 8
+        hidden_size: 768
+        label_smoothing: 0.2
+        labels:
+        - Non-Hate-Speech
+        - Hate-Speech
+        loss_type: ce
+        lr: 3e-05
+        lr_factor: 0.5
+        lr_patience: 1
+        max_epochs: 10
+        max_length: 256
+        model_path: google/muril-base-cased
+        num_workers: 2
+        number_folds: 5
+        seed: 1111
+        task_name: hate_speech_binary_classification
+        test_filename: hate-speech-homophobia/test_data.csv
+        train_filename: hate-speech-homophobia/train_data.csv
+        tunning_metric: Recall
+        use_fp16: true
+    outs:
+    - path: cv_results.json
+      md5: f3e515f6e6e51f6f86a3166485cea1d5
+      size: 292

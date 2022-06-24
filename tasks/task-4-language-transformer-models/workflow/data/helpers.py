@@ -4,7 +4,6 @@ from collections import Counter
 import functools
 import os
 import pandas as pd
-from transformers import AutoTokenizer
 from .dataset import TamilDataset
 
 
@@ -40,7 +39,7 @@ def preprocess_homophobia_corpus(data: pd.DataFrame):
     return data
 
 
-def load_datasets(args):
+def load_dataset(args):
     data_path = os.path.join(os.path.dirname(os.getcwd()), 'data')
 
     train_data_path = os.path.join(data_path, args.train_filename)
@@ -48,26 +47,11 @@ def load_datasets(args):
     train_corpus.columns = ['text', 'label']
     train_corpus = preprocess_homophobia_corpus(train_corpus)
 
-    dev_data_path = os.path.join(data_path, args.dev_filename)
-    dev_corpus = pd.read_csv(dev_data_path, sep=",", index_col=0)
-    dev_corpus.columns = ['text', 'label']
-    dev_corpus = preprocess_homophobia_corpus(dev_corpus)
-
-    if args.test_filename != "None":
-        test_data_path = os.path.join(data_path, args.test_filename)
-        test_corpus = pd.read_csv(test_data_path, sep=",", index_col=0)
-        test_corpus.columns = ['text', 'label']
-        test_corpus = preprocess_homophobia_corpus(test_corpus)
-
-        return train_corpus, dev_corpus, test_corpus
-        
-    return train_corpus, dev_corpus, None
+    return train_corpus
 
 
-def get_data_loaders(args):
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
+def get_data_loaders(args, train_corpus, dev_corpus, tokenizer):
 
-    train_corpus, dev_corpus, test_corpus = load_datasets(args)
     args.label_freqs = get_labels_frequencies(train_corpus)
     args.num_labels = len(args.labels)
 
@@ -93,16 +77,4 @@ def get_data_loaders(args):
         collate_fn=collate_fn,
     )
 
-    if test_corpus is not None:
-        test_dataset = TamilDataset(test_corpus, tokenizer, args.labels, args.max_length)
-        test_loader = DataLoader(
-            test_dataset,
-            batch_size=args.batch_size,
-            shuffle=False,
-            num_workers=args.num_workers,
-            collate_fn=collate_fn,
-        )
-
-        return train_loader, val_loader, test_loader
-    
-    return train_loader, val_loader, None
+    return train_loader, val_loader
