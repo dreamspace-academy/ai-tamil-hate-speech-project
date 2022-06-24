@@ -4,6 +4,7 @@ from argparse import Namespace
 from tqdm import tqdm
 import numpy as np
 import yaml
+import time
 
 import torch
 import torch.nn as nn
@@ -165,6 +166,7 @@ def train(args):
     skf = StratifiedKFold(n_splits=args.number_folds, random_state=args.seed, shuffle=True)
     tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
 
+    start_time = time.time()
     for k, (train_index, dev_index) in enumerate(skf.split(data, data.label)):
 
         train_corpus, dev_corpus = data.iloc[train_index], data.iloc[dev_index]
@@ -226,7 +228,6 @@ def train(args):
             model.eval()
             metrics = model_eval(i_epoch, val_loader, model, args, criterion)
             logger.info("Train Loss: {:.4f}".format(np.mean(train_losses)))
-            log_metrics("Val", global_step, metrics, args, logger)
             train_loss.append(np.mean(train_losses))
             append_metrics(validation_metrics_history, metrics)
 
@@ -253,7 +254,7 @@ def train(args):
         load_checkpoint(model, os.path.join(args.savedir, "model_best.pt"))
         model.eval()
         test_metrics = model_eval(np.inf, val_loader, model, args, criterion, store_preds=True)
-        log_metrics(f"Validation best model {k+1}th fold", global_step, test_metrics, args, logger)
+        log_metrics(f"Validation {k+1}th fold", global_step, test_metrics, args, logger)
 
         metrics_fold["Accuracy"].append(test_metrics['Accuracy'])
         metrics_fold["F1"].append(test_metrics['F1'])
@@ -262,6 +263,8 @@ def train(args):
 
         os.remove(os.path.join(args.savedir, "model_best.pt"))
         os.remove(os.path.join(args.savedir, "checkpoint.pt"))
+    
+    end_time = time.time()
     
     accuracy_mean = np.mean(metrics_fold['Accuracy'])
     accuracy_std = np.std(metrics_fold['Accuracy'])
@@ -295,7 +298,7 @@ def train(args):
             'mean': recall_mean,
             'std': recall_std,
         },
-        'num_folds': args.number_folds,
+        'elapsed_time': f"{(end_time-start_time):.2f} s",
     }
 
     with open('cv_results.json', 'w') as fp:
