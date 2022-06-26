@@ -2,6 +2,8 @@ stages:
   behavioral_test:
     cmd: python test.py
     deps:
+    - ../task-4-language-transformer-models/workflow/model_artifacts/args.pt
+    - ../task-4-language-transformer-models/workflow/model_artifacts/model_best.pt
     - test.py
     - test_data/Behavioral Testing - INV-Typos.csv
     - test_data/Behavioral Testing - MFT-Adversarial.csv

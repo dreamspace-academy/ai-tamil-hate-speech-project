@@ -3,6 +3,12 @@ stages:
   behavioral_test:
     cmd: python test.py
     deps:
+    - path: ../task-4-language-transformer-models/workflow/model_artifacts/args.pt
+      md5: 452cd929ddeb040951ee2fb636f621d6
+      size: 1455
+    - path: ../task-4-language-transformer-models/workflow/model_artifacts/model_best.pt
+      md5: adda4f42740e353a7e22bb96667d9af4
+      size: 952692063
     - path: test.py
       md5: a636a537e70bd971d594fa1cb6dbbcaf
       size: 4533
