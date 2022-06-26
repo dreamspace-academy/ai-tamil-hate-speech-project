@@ -1,0 +1,11 @@
+stages:
+  behavioral_test:
+    cmd: python test.py
+    deps:
+    - test.py
+    - test_data/Behavioral Testing - INV-Typos.csv
+    - test_data/Behavioral Testing - MFT-Adversarial.csv
+    - test_data/Behavioral Testing - MFT-Neutral.csv
+    - test_data/Behavioral Testing - MFT-Script.csv
+    metrics:
+    - results/test_results.json

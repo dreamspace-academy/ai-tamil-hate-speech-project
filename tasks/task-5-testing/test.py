@@ -2,6 +2,8 @@ import torch
 from model import SentClf
 from transformers import AutoTokenizer
 import pandas as pd
+import os
+import json
 
 # Helper function to get predictions
 def predict(input_text):
@@ -39,6 +41,7 @@ model.load_state_dict(torch.load("/content/NYU/tasks/task-4-language-transformer
 model = model.to(device)
 model.eval()
 tokenizer = AutoTokenizer.from_pretrained("google/muril-base-cased", use_fast=True)
+tests_results = {}
 
 # Load MFT-Neutral test data
 
@@ -46,7 +49,7 @@ print("-"*20)
 print("MFT-Neutral test")
 print("-"*20, "\n")
 
-data = pd.read_csv('Behavioral Testing - MFT-Neutral.csv', skiprows=1)['Tamil']
+data = pd.read_csv('test_data/Behavioral Testing - MFT-Neutral.csv', skiprows=1)['Tamil']
 incorrect_count = 0
 
 for i,example in enumerate(data):
@@ -55,6 +58,8 @@ for i,example in enumerate(data):
     if pred != 'Non-Hate-Speech':
         incorrect_count += 1
 print(f"\nError rate: {incorrect_count/data.shape[0]}")
+
+tests_results['MFT-Neutral'] = incorrect_count/data.shape[0]
 
 # Load MFT-Adversarial test data
 
@@ -62,7 +67,7 @@ print("\n"+"-"*20)
 print("\nMFT-Adversarial test")
 print("-"*20, "\n")
 
-data = pd.read_csv('Behavioral Testing - MFT-Adversarial.csv', skiprows=1)['Tamil']
+data = pd.read_csv('test_data/Behavioral Testing - MFT-Adversarial.csv', skiprows=1)['Tamil']
 incorrect_count = 0
 
 for i,example in enumerate(data):
@@ -70,7 +75,10 @@ for i,example in enumerate(data):
     pred, prob = predict(example)
     if pred != 'Non-Hate-Speech':
         incorrect_count += 1
+
 print(f"\nError rate: {incorrect_count/data.shape[0]}")
+
+tests_results['MFT-Adversarial'] = incorrect_count/data.shape[0]
 
 # Load MFT-Script test data
 
@@ -78,7 +86,7 @@ print("\n"+"-"*20)
 print("\nMFT-Script test")
 print("-"*20, "\n")
 
-data = pd.read_csv('Behavioral Testing - MFT-Script.csv', skiprows=1)[:6]
+data = pd.read_csv('test_data/Behavioral Testing - MFT-Script.csv', skiprows=1)[:6]
 total_error_rate = 0
 column_names = data.columns.to_list()[:4]
 error_by_type = {
@@ -86,6 +94,9 @@ error_by_type = {
     1: 0,
     2: 0,
     3: 0
+}
+tests_results['MFT-Script'] = {
+    'error_by_type': {},
 }
 
 for i, row in data.iterrows():
@@ -102,9 +113,11 @@ for i, row in data.iterrows():
 
 print("")
 for script_type, error_count in error_by_type.items():
+    tests_results['MFT-Script']['error_by_type'][column_names[script_type]] = error_count/data.shape[0]
     print(f"{column_names[script_type]} error rate: {error_count/data.shape[0]}")
 
 print(f"\nError rate: {total_error_rate/data.shape[0]}")
+tests_results['MFT-Script']['total_error'] = total_error_rate/data.shape[0]
 
 # Load INV-Typos test data
 
@@ -112,7 +125,7 @@ print("\n"+"-"*20)
 print("\nINV-Typos test")
 print("-"*20, "\n")
 
-data = pd.read_csv('Behavioral Testing - INV-Typos.csv', skiprows=1)
+data = pd.read_csv('test_data/Behavioral Testing - INV-Typos.csv', skiprows=1)
 data_groups = data.groupby('Index')
 total_error_rate = 0
 
@@ -131,3 +144,10 @@ for name, group in data_groups:
     print(f"Example {name} with label {true_label: <16}. Error rate: {error_rate}")
 
 print(f"\nError rate: {total_error_rate/len(data_groups)}")
+tests_results['INV-Typos'] = total_error_rate/len(data_groups)
+
+# Save test results
+
+os.makedirs('results', exist_ok=True)
+with open('results/test_results.json', 'w') as fp:
+    json.dump(tests_results, fp)

@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  behavioral_test:
+    cmd: python test.py
+    deps:
+    - path: test.py
+      md5: a636a537e70bd971d594fa1cb6dbbcaf
+      size: 4533
+    - path: test_data/Behavioral Testing - INV-Typos.csv
+      md5: d5899ae4b401501014a641b4fd339ddf
+      size: 1274
+    - path: test_data/Behavioral Testing - MFT-Adversarial.csv
+      md5: bba629960dcafe507939b13f01594fcc
+      size: 3955
+    - path: test_data/Behavioral Testing - MFT-Neutral.csv
+      md5: 66cc705d5736e2079325b477cfbc83ea
+      size: 4483
+    - path: test_data/Behavioral Testing - MFT-Script.csv
+      md5: 784467b9b73cd54be3c6fa5fe4c66bda
+      size: 4733
+    outs:
+    - path: results/test_results.json
+      md5: b03a1a8d4ba76a534bbbbc3ea24d08ce
+      size: 244
