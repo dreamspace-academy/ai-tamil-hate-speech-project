@@ -50,7 +50,6 @@ This pipeline is intended for performing training, validation of model.
 | label_smoothing | Label smoothing value (only applicable for multiclass tasks) | `Float` |
 | hidden_size | Embedding size of transformer model | `Integer` |
 | max_length | Maximum of tokens to consider for input text | `Integer` |
-| number_folds | Number of folds to use during cross validation | `Integer` |
 | class_threshold | Threshold to transform predicted probability into 0 or 1 class | `Float` between 0 and 1 |
 | model_path | Transformer model name. Path must follow HuggingFace model format | `google/muril-base-cased`,`xlm-roberta-base`,`bert-base-multilingual-uncased`, etc. |
 | task_name | Name of task | `hate_speech_binary_classification` |
