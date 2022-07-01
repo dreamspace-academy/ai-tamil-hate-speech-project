@@ -1,0 +1,4 @@
+outs:
+- md5: e4bd349a74af4c763a667d757950e298
+  size: 307965
+  path: doccano_annotated.csv
