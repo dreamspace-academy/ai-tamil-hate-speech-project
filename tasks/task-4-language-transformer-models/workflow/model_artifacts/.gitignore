@@ -6,3 +6,4 @@
 /test_labels_prob_pred.txt
 /test_pr_values.txt
 /pr_curve.png
+/test_pr_values.csv

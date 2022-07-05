@@ -12,18 +12,12 @@ loss_type: ce
 use_fp16: True
 label_smoothing: 0.2
 hidden_size: 768
-max_length: 256
-number_folds: 5
-class_threshold: 0.2
+max_length: 512
+class_threshold: 0.5
 
 # Model selection
-# 'monsoon-nlp/tamillion', 'xlm-roberta-base', 'bert-base-multilingual-uncased', 'google/muril-base-cased', 'distilbert-base-uncased'
 model_path: "google/muril-base-cased"
 
 # Dataset params
 task_name: "hate_speech_binary_classification"
-dataset: "hate-speech-homophobia"
 labels: ['Non-Hate-Speech', 'Hate-Speech']
-train_filename: "hate-speech-homophobia/train_data.csv"
-dev_filename: "hate-speech-homophobia/dev_data.csv"
-test_filename: "hate-speech-homophobia/test_data.csv"

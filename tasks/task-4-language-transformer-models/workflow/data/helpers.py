@@ -33,21 +33,11 @@ def get_labels_frequencies(train_dataset):
     return label_freqs
 
 
-def preprocess_homophobia_corpus(data: pd.DataFrame):
-    data.loc[data['label'].str.contains('phobic'), 'label'] = 'Hate-Speech'
-    data.loc[data['label'] != 'Hate-Speech', 'label'] = 'Non-Hate-Speech'
-    return data
-
-
 def load_dataset(args):
     data_path = os.path.join(os.path.dirname(os.getcwd()), 'data')
-
-    train_data_path = os.path.join(data_path, args.train_filename)
-    train_corpus = pd.read_csv(train_data_path, sep=",", index_col=0)
-    train_corpus.columns = ['text', 'label']
-    train_corpus = preprocess_homophobia_corpus(train_corpus)
-
-    return train_corpus
+    data_path = os.path.join(data_path, 'train.csv')
+    data = pd.read_csv(data_path, index_col=0, header=0)
+    return data
 
 
 def get_data_loaders(args, train_corpus, dev_corpus, tokenizer):
@@ -57,7 +47,6 @@ def get_data_loaders(args, train_corpus, dev_corpus, tokenizer):
 
     train_dataset = TamilDataset(train_corpus, tokenizer, args.labels, args.max_length)
     args.train_data_len = len(train_corpus)
-    #collate = functools.partial(collate_fn, args=args)
 
     train_loader = DataLoader(
         train_dataset,

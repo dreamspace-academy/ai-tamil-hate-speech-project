@@ -7,6 +7,7 @@ import yaml
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from transformers import AutoTokenizer
 
 from sklearn.metrics import (
     accuracy_score,
@@ -18,8 +19,9 @@ from sklearn.metrics import (
     PrecisionRecallDisplay,
     precision_recall_curve
 )
+from sklearn.model_selection import train_test_split
 
-from data.helpers import get_data_loaders
+from data.helpers import get_data_loaders, load_dataset
 from models.transformer import SentClf
 from utils.logger import create_logger
 from utils.utils import *
@@ -38,17 +40,18 @@ def get_args():
 
 
 def get_criterion(args):
-    freqs = [args.label_freqs[l] for l in args.labels]
-    label_weights = (np.array(freqs) / args.train_data_len) ** -1
+    args.freqs = [args.label_freqs[l] for l in args.labels]
+    args.label_weights = (np.array(args.freqs) / args.train_data_len) ** -1
+    args.positive_label_weight = args.label_weights[1]
 
     if args.loss_type == 'weighted_ce':
         if args.num_labels == 2:
-            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([label_weights[1]]).to(args.device))
+            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([args.positive_label_weight]).to(args.device))
         else:
-            criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(label_weights).to(args.device))
+            criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(args.label_weights).to(args.device))
     elif args.loss_type == 'smoothed_weighted_ce' and args.num_labels > 2:
         criterion = nn.CrossEntropyLoss(
-            weight=torch.FloatTensor(label_weights).to(args.device),
+            weight=torch.FloatTensor(args.label_weights).to(args.device),
             size_average=None, 
             ignore_index=-100,
             reduction='mean',
@@ -89,7 +92,7 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
             if args.num_labels == 2:
                 out_probs = torch.sigmoid(out).cpu().detach().numpy()
                 prob_preds.extend(out_probs[:,0].tolist())
-                pred = np.where(out_probs > 0.4, 1, 0)
+                pred = np.where(out_probs > args.class_threshold, 1, 0)
             else:
                 pred = torch.nn.functional.softmax(out, dim=1).argmax(dim=1).cpu().detach().numpy()
             preds.append(pred)
@@ -151,7 +154,16 @@ def train(args):
     logger = create_logger("%s/logfile.log" % args.savedir, args)
     cuda_len = torch.cuda.device_count()
 
-    train_loader, val_loader, test_loader = get_data_loaders(args)
+    data = load_dataset(args)
+    train_corpus, dev_corpus = train_test_split(
+        data,
+        test_size=0.1,
+        random_state=42,
+        stratify=data.label,
+        shuffle=True
+    )
+    tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
+    train_loader, val_loader = get_data_loaders(args, train_corpus, dev_corpus, tokenizer)
     model = SentClf(args)
     criterion = get_criterion(args)
     optimizer = get_optimizer(model, args)
@@ -237,7 +249,7 @@ def train(args):
     model.eval()
 
     test_metrics = model_eval(np.inf, val_loader, "Test", model, args, criterion, store_preds=True)
-    log_metrics(f"Test", global_step, test_metrics, args, logger)
+    log_metrics(f"Best model Val", global_step, test_metrics, args, logger)
 
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
     mlflow.log_artifact(f"{args.savedir}/test_labels_pred.txt")

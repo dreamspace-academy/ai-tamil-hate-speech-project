@@ -2,10 +2,7 @@ stages:
   train_eval:
     cmd: python train_eval.py
     deps:
-    - ../data/hate-speech-homophobia/dev_data.csv
-    - ../data/hate-speech-homophobia/test_data.csv
-    - ../data/hate-speech-homophobia/train_data.csv
-    - params.yaml
+    - ../data/train.csv
     - train_eval.py
     outs:
     - model_artifacts/args.pt
@@ -14,4 +11,7 @@ stages:
     - model_artifacts/test_labels_gold.txt
     - model_artifacts/test_labels_pred.txt
     - model_artifacts/test_labels_prob_pred.txt
-    - model_artifacts/test_pr_values.txt
+    params:
+    - params.yaml:
+    metrics:
+    - model_artifacts/test_pr_values.csv

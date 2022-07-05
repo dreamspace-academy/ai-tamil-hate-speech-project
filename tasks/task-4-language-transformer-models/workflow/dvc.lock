@@ -3,40 +3,54 @@ stages:
   train_eval:
     cmd: python train_eval.py
     deps:
-    - path: ../data/hate-speech-homophobia/dev_data.csv
-      md5: c908b2c85ee2b44d9af0b1d2ae2cad6c
-      size: 108838
-    - path: ../data/hate-speech-homophobia/test_data.csv
-      md5: 314e0d1a0d67ebb3370e8d47c1584400
-      size: 97534
-    - path: ../data/hate-speech-homophobia/train_data.csv
-      md5: 8faa7f3fc4a6b356ecb2026dee599fda
-      size: 904786
-    - path: params.yaml
-      md5: aac3b7e2b1216820f86d816cc31689a7
-      size: 762
+    - path: ../data/train.csv
+      md5: 4918dc79fc60dd237528bf703214cb7f
+      size: 1430394
     - path: train_eval.py
-      md5: bd09043d00aa0e6c8cbf26357ae1009c
-      size: 8431
+      md5: a00097960b040155b7012317201d101f
+      size: 8953
+    params:
+      params.yaml:
+        batch_size: 16
+        class_threshold: 0.5
+        es_patience: 3
+        gradient_accumulation_steps: 8
+        hidden_size: 768
+        label_smoothing: 0.2
+        labels:
+        - Non-Hate-Speech
+        - Hate-Speech
+        loss_type: ce
+        lr: 3e-05
+        lr_factor: 0.5
+        lr_patience: 1
+        max_epochs: 10
+        max_length: 512
+        model_path: google/muril-base-cased
+        num_workers: 2
+        seed: 1111
+        task_name: hate_speech_binary_classification
+        tunning_metric: Recall
+        use_fp16: true
     outs:
     - path: model_artifacts/args.pt
-      md5: 452cd929ddeb040951ee2fb636f621d6
-      size: 1455
+      md5: d47a0ba6b5beeda4875f0f33b902e43f
+      size: 1647
     - path: model_artifacts/model_best.pt
-      md5: adda4f42740e353a7e22bb96667d9af4
+      md5: ddef0c026fdc461cabd18e15b2764cd5
       size: 952692063
     - path: model_artifacts/test_labels.txt
       md5: 72cf4d8023dc267d0ba0d192bf69f769
       size: 27
     - path: model_artifacts/test_labels_gold.txt
-      md5: b26c2e8176e929ce01acc9aba26dc012
-      size: 663
+      md5: 754f94eae50a55c44e1e98a5a1fdca7b
+      size: 1111
     - path: model_artifacts/test_labels_pred.txt
-      md5: 988608c0b8a7b2c8d4c4faae7e0fd7b9
-      size: 1327
+      md5: 03a86aafceeb28d4b683d19c523c4f96
+      size: 2223
     - path: model_artifacts/test_labels_prob_pred.txt
-      md5: 2c8cb4889b0b18cc1429eee8b1a2f738
-      size: 5530
-    - path: model_artifacts/test_pr_values.txt
-      md5: 01b552a7b5072d2a173279403ede5812
-      size: 7131
+      md5: 941e97b47a88f90133b462c545dc3263
+      size: 9144
+    - path: model_artifacts/test_pr_values.csv
+      md5: f5b85fc9670992227c4e492b48a2d272
+      size: 16822

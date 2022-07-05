@@ -45,7 +45,7 @@ def store_preds_to_disk(args, tgts, preds, prob_preds=None, pr_values=None):
         with open(os.path.join(args.savedir, "test_labels_prob_pred.txt"), "w") as fw:
             fw.write("\n".join([str(x) for x in prob_preds]))
     if pr_values:
-        with open(os.path.join(args.savedir, "test_pr_values.txt"), "w") as fw:
+        with open(os.path.join(args.savedir, "test_pr_values.csv"), "w") as fw:
             fw.write("precision,recall,threshold\n")
             fw.write("\n".join([f"{p},{r},{thr}" for p,r,thr in zip(pr_values[0], pr_values[1], pr_values[2])]))
     with open(os.path.join(args.savedir, "test_labels_gold.txt"), "w") as fw:
