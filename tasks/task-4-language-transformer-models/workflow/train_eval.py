@@ -176,8 +176,6 @@ def train(args):
 
     model.to(args.device)
 
-    torch.save(args, os.path.join(args.savedir, "args.pt"))
-
     start_epoch, global_step, n_no_improve, best_metric = 0, 0, 0, -np.inf
 
     validation_metrics_history = {
@@ -251,6 +249,8 @@ def train(args):
     test_metrics = model_eval(np.inf, val_loader, "Test", model, args, criterion, store_preds=True)
     log_metrics(f"Best model Val", global_step, test_metrics, args, logger)
 
+    torch.save(args, os.path.join(args.savedir, "args.pt"))
+    
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
     mlflow.log_artifact(f"{args.savedir}/test_labels_pred.txt")
     mlflow.log_artifact(f"{args.savedir}/test_labels_prob_pred.txt")

@@ -20,7 +20,7 @@ stages:
         labels:
         - Non-Hate-Speech
         - Hate-Speech
-        loss_type: ce
+        loss_type: weighted_ce
         lr: 3e-05
         lr_factor: 0.5
         lr_patience: 1
@@ -34,10 +34,10 @@ stages:
         use_fp16: true
     outs:
     - path: model_artifacts/args.pt
-      md5: d47a0ba6b5beeda4875f0f33b902e43f
+      md5: c19b1bc2beca0cfd52bbfc0c2744341e
       size: 1647
     - path: model_artifacts/model_best.pt
-      md5: ddef0c026fdc461cabd18e15b2764cd5
+      md5: b6b5807e01d0d5ce686760a89963b5f4
       size: 952692063
     - path: model_artifacts/test_labels.txt
       md5: 72cf4d8023dc267d0ba0d192bf69f769
@@ -46,11 +46,11 @@ stages:
       md5: 754f94eae50a55c44e1e98a5a1fdca7b
       size: 1111
     - path: model_artifacts/test_labels_pred.txt
-      md5: 03a86aafceeb28d4b683d19c523c4f96
+      md5: 03da1c1f2e1292c5771e9c80b756a5ee
       size: 2223
     - path: model_artifacts/test_labels_prob_pred.txt
-      md5: 941e97b47a88f90133b462c545dc3263
-      size: 9144
+      md5: fb0e603441d1d82c56ee6b561f2fa55a
+      size: 9482
     - path: model_artifacts/test_pr_values.csv
-      md5: f5b85fc9670992227c4e492b48a2d272
-      size: 16822
+      md5: 7c09e2a736a83a4a8d4d10a5242897d9
+      size: 17369

@@ -8,7 +8,7 @@ lr_factor: 0.5
 es_patience: 3
 gradient_accumulation_steps: 8
 tunning_metric: "Recall"
-loss_type: ce
+loss_type: weighted_ce
 use_fp16: True
 label_smoothing: 0.2
 hidden_size: 768
