@@ -150,7 +150,6 @@ def model_forward(i_epoch, model, args, criterion, batch):
 def train(args):
     set_seed(args.seed)
     set_mlflow(args)
-    mlflow.log_params(namespace_to_dict(args))
     logger = create_logger("%s/logfile.log" % args.savedir, args)
     cuda_len = torch.cuda.device_count()
 
@@ -250,7 +249,8 @@ def train(args):
     log_metrics(f"Best model Val", global_step, test_metrics, args, logger)
 
     torch.save(args, os.path.join(args.savedir, "args.pt"))
-    
+    mlflow.log_params(namespace_to_dict(args))
+
     mlflow.log_artifact(f"{args.savedir}/logfile.log")
     mlflow.log_artifact(f"{args.savedir}/test_labels_pred.txt")
     mlflow.log_artifact(f"{args.savedir}/test_labels_prob_pred.txt")
