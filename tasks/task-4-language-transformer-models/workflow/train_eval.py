@@ -42,14 +42,11 @@ def get_args():
 def get_criterion(args):
     args.freqs = [args.label_freqs[l] for l in args.labels]
     args.label_weights = (np.array(args.freqs) / args.train_data_len) ** -1
-    args.positive_label_weight = args.label_weights[1]
+    args.label_weights[1] = args.label_weights[1]*2
 
     if args.loss_type == 'weighted_ce':
-        if args.num_labels == 2:
-            criterion = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([args.positive_label_weight]).to(args.device))
-        else:
-            criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(args.label_weights).to(args.device))
-    elif args.loss_type == 'smoothed_weighted_ce' and args.num_labels > 2:
+        criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(args.label_weights).to(args.device))
+    elif args.loss_type == 'smoothed_weighted_ce':
         criterion = nn.CrossEntropyLoss(
             weight=torch.FloatTensor(args.label_weights).to(args.device),
             size_average=None, 
@@ -58,10 +55,7 @@ def get_criterion(args):
             label_smoothing=args.label_smoothing
         )
     else:
-        if args.num_labels == 2:
-            criterion = nn.BCEWithLogitsLoss()
-        else:
-            criterion = nn.CrossEntropyLoss()
+        criterion = nn.CrossEntropyLoss()
     
     return criterion
 
@@ -89,35 +83,29 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
             loss, out, tgt = model_forward(i_epoch, model, args, criterion, batch)
             losses.append(loss.item())
 
-            if args.num_labels == 2:
-                out_probs = torch.sigmoid(out).cpu().detach().numpy()
-                prob_preds.extend(out_probs[:,0].tolist())
-                pred = np.where(out_probs > args.class_threshold, 1, 0)
-            else:
-                pred = torch.nn.functional.softmax(out, dim=1).argmax(dim=1).cpu().detach().numpy()
+            probs = torch.nn.functional.softmax(out, dim=1)
+            pred = probs.argmax(dim=1).cpu().detach().numpy()
             preds.append(pred)
             
             tgt = tgt.cpu().detach().numpy()
             tgts.append(tgt)
+            prob_preds.extend([probs[i].cpu().detach().numpy()[idx] for i,idx in enumerate(pred)])
 
     metrics = {"loss": np.mean(losses)}
     
     tgts = [l for sl in tgts for l in sl]
     preds = [l for sl in preds for l in sl]
-    precision_recall_f1score_metric = precision_recall_fscore_support(tgts, preds, average='macro')
+    precision_recall_f1score_metric = precision_recall_fscore_support(tgts, preds)
     metrics["Accuracy"] = accuracy_score(tgts, preds)
     metrics["Precision"] = precision_recall_f1score_metric[0]
     metrics["Recall"] = precision_recall_f1score_metric[1]
     metrics["F1"] = precision_recall_f1score_metric[2]
     
     if store_preds:
-        if args.num_labels == 2:
-            display = PrecisionRecallDisplay.from_predictions(y_true=tgts, y_pred=prob_preds)
-            display.figure_.savefig(os.path.join(args.savedir, 'pr_curve.png'))
-            pr_values = precision_recall_curve(y_true=tgts, probas_pred=prob_preds)
-            store_preds_to_disk(args, tgts, preds, prob_preds, pr_values)
-        else:
-            store_preds_to_disk(args, tgts, preds)
+        display = PrecisionRecallDisplay.from_predictions(y_true=tgts, y_pred=prob_preds)
+        display.figure_.savefig(os.path.join(args.savedir, 'pr_curve.png'))
+        pr_values = precision_recall_curve(y_true=tgts, probas_pred=prob_preds)
+        store_preds_to_disk(args, tgts, preds, prob_preds, pr_values)
 
     return metrics
 
@@ -133,16 +121,10 @@ def model_forward(i_epoch, model, args, criterion, batch):
     if args.use_fp16:
         with torch.cuda.amp.autocast():
             out = model(txt, mask, segment)
-            if args.num_labels == 2:
-                loss = criterion(out, torch.unsqueeze(tgt.type_as(out), 1))
-            else:
-                loss = criterion(out, tgt)
+            loss = criterion(out, tgt)
     else:
         out = model(txt, mask, segment)
-        if args.num_labels == 2:
-            loss = criterion(out, torch.unsqueeze(tgt.type_as(out), 1))
-        else:
-            loss = criterion(out, tgt)
+        loss = criterion(out, tgt)
 
     return loss, out, tgt
 
@@ -222,7 +204,7 @@ def train(args):
         train_loss.append(np.mean(train_losses))
         append_metrics(validation_metrics_history, metrics)
 
-        tuning_metric = metrics[args.tunning_metric]
+        tuning_metric = metrics[args.tunning_metric][1]
         scheduler.step(tuning_metric)
         is_improvement = tuning_metric > best_metric
         if is_improvement:

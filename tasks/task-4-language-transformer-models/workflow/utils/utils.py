@@ -56,19 +56,25 @@ def store_preds_to_disk(args, tgts, preds, prob_preds=None, pr_values=None):
 
 def log_metrics(set_name, step, metrics, args, logger):
     logger.info(
-        "{}: Loss: {:.5f} | F1: {:.5f} | Precision: {:.5f} | Recall: {:.5f} | Accuracy: {:.5f}".format(
+        "{}: Loss: {:.5f} | F1: {:.5f}-{:.5f} | Precision: {:.5f}-{:.5f} | Recall: {:.5f}-{:.5f} | Accuracy: {:.5f}".format(
             set_name,
             metrics["loss"],
-            metrics["F1"],
-            metrics["Precision"],
-            metrics["Recall"],
+            metrics["F1"][0],
+            metrics["F1"][1],
+            metrics["Precision"][0],
+            metrics["Precision"][1],
+            metrics["Recall"][0],
+            metrics["Recall"][1],
             metrics["Accuracy"]
         )
     )
-    mlflow.log_metric(f"{set_name} Accuracy", metrics["Accuracy"], step)
-    mlflow.log_metric(f"{set_name} Precision", metrics["Precision"], step)
-    mlflow.log_metric(f"{set_name} Recall", metrics["Recall"], step)
-    mlflow.log_metric(f"{set_name} F1", metrics["F1"], step)
+    mlflow.log_metric(f"{set_name} Acc", metrics["Accuracy"], step)
+    mlflow.log_metric(f"{set_name} Pre-N", metrics["Precision"][0], step)
+    mlflow.log_metric(f"{set_name} Pre-P", metrics["Precision"][1], step)
+    mlflow.log_metric(f"{set_name} Rec-N", metrics["Recall"][0], step)
+    mlflow.log_metric(f"{set_name} Rec-P", metrics["Recall"][1], step)
+    mlflow.log_metric(f"{set_name} F1-N", metrics["F1"][0], step)
+    mlflow.log_metric(f"{set_name} F1-P", metrics["F1"][1], step)
     mlflow.log_metric(f"{set_name} Loss", metrics["loss"], step)
 
 
