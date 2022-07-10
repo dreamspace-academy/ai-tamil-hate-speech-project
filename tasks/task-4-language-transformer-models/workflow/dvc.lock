@@ -7,12 +7,12 @@ stages:
       md5: 4918dc79fc60dd237528bf703214cb7f
       size: 1430394
     - path: train_eval.py
-      md5: a00097960b040155b7012317201d101f
-      size: 8953
+      md5: 9d9455d28766cb2a4919e2c0c7ee7018
+      size: 8234
     params:
       params.yaml:
         batch_size: 16
-        class_threshold: 0.5
+        class_threshold: 0.3
         es_patience: 3
         gradient_accumulation_steps: 8
         hidden_size: 768
@@ -20,7 +20,7 @@ stages:
         labels:
         - Non-Hate-Speech
         - Hate-Speech
-        loss_type: weighted_ce
+        loss_type: smoothed_weighted_ce
         lr: 3e-05
         lr_factor: 0.5
         lr_patience: 1
@@ -30,15 +30,15 @@ stages:
         num_workers: 2
         seed: 1111
         task_name: hate_speech_binary_classification
-        tunning_metric: Recall
+        tunning_metric: F1
         use_fp16: true
     outs:
     - path: model_artifacts/args.pt
-      md5: c19b1bc2beca0cfd52bbfc0c2744341e
-      size: 1647
+      md5: 470ed509e1bc577a2f4a3728a7c43068
+      size: 1519
     - path: model_artifacts/model_best.pt
-      md5: b6b5807e01d0d5ce686760a89963b5f4
-      size: 952692063
+      md5: 5f18b8d607f662120001c8b19cb9245c
+      size: 952695135
     - path: model_artifacts/test_labels.txt
       md5: 72cf4d8023dc267d0ba0d192bf69f769
       size: 27
@@ -46,11 +46,11 @@ stages:
       md5: 754f94eae50a55c44e1e98a5a1fdca7b
       size: 1111
     - path: model_artifacts/test_labels_pred.txt
-      md5: 03da1c1f2e1292c5771e9c80b756a5ee
-      size: 2223
+      md5: 5b7139341b68d94af7ea64c2bceffccc
+      size: 1111
     - path: model_artifacts/test_labels_prob_pred.txt
-      md5: fb0e603441d1d82c56ee6b561f2fa55a
-      size: 9482
+      md5: cfe6a357e93443f54e417d03f56ed4b4
+      size: 3585
     - path: model_artifacts/test_pr_values.csv
-      md5: 7c09e2a736a83a4a8d4d10a5242897d9
-      size: 17369
+      md5: bf5e9a004b19ffafd9bc6fefae51bb69
+      size: 18715

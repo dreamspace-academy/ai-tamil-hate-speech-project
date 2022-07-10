@@ -42,7 +42,7 @@ def get_args():
 def get_criterion(args):
     args.freqs = [args.label_freqs[l] for l in args.labels]
     args.label_weights = (np.array(args.freqs) / args.train_data_len) ** -1
-    args.label_weights[1] = args.label_weights[1]*3
+    args.label_weights[1] = args.label_weights[1]*2
 
     if args.loss_type == 'weighted_ce':
         criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(args.label_weights).to(args.device))
