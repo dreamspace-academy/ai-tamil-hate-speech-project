@@ -54,3 +54,22 @@ stages:
     - path: model_artifacts/test_pr_values.csv
       md5: bf5e9a004b19ffafd9bc6fefae51bb69
       size: 18715
+  test:
+    cmd: python test.py
+    deps:
+    - path: ../data/test.csv
+      md5: b2b94312fcc8984cbc8ae92e14ecb2ac
+      size: 219711
+    - path: model_artifacts/args.pt
+      md5: 470ed509e1bc577a2f4a3728a7c43068
+      size: 1519
+    - path: model_artifacts/model_best.pt
+      md5: 5f18b8d607f662120001c8b19cb9245c
+      size: 952695135
+    - path: test.py
+      md5: 7f192bc24275ffcdd616d05f2aff11d6
+      size: 3136
+    outs:
+    - path: test_results/test_metrics.json
+      md5: cd3f3cdea24ab6c9ddb4d52df206b99c
+      size: 524

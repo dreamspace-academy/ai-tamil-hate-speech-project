@@ -15,3 +15,12 @@ stages:
     - params.yaml:
     metrics:
     - model_artifacts/test_pr_values.csv
+  test:
+    cmd: python test.py
+    deps:
+    - ../data/test.csv
+    - model_artifacts/args.pt
+    - model_artifacts/model_best.pt
+    - test.py
+    metrics:
+    - test_results/test_metrics.json

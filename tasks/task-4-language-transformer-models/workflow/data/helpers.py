@@ -33,9 +33,9 @@ def get_labels_frequencies(train_dataset):
     return label_freqs
 
 
-def load_dataset(args):
+def load_dataset(args, file_name):
     data_path = os.path.join(os.path.dirname(os.getcwd()), 'data')
-    data_path = os.path.join(data_path, 'train.csv')
+    data_path = os.path.join(data_path, file_name)
     data = pd.read_csv(data_path, index_col=0, header=0)
     return data
 

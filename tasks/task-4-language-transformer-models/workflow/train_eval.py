@@ -136,7 +136,7 @@ def train(args):
     logger = create_logger("%s/logfile.log" % args.savedir, args)
     cuda_len = torch.cuda.device_count()
 
-    data = load_dataset(args)
+    data = load_dataset(args, "train.csv")
     train_corpus, dev_corpus = train_test_split(
         data,
         test_size=0.1,
