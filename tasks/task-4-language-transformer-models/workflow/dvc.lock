@@ -7,12 +7,12 @@ stages:
       md5: 4918dc79fc60dd237528bf703214cb7f
       size: 1430394
     - path: train_eval.py
-      md5: 9d9455d28766cb2a4919e2c0c7ee7018
-      size: 8234
+      md5: 9a6f6c1e859dff928e9c8a72b5fb6a35
+      size: 8247
     params:
       params.yaml:
         batch_size: 16
-        class_threshold: 0.3
+        class_threshold: 0.4
         es_patience: 3
         gradient_accumulation_steps: 8
         hidden_size: 768
@@ -24,7 +24,7 @@ stages:
         lr: 3e-05
         lr_factor: 0.5
         lr_patience: 1
-        max_epochs: 10
+        max_epochs: 6
         max_length: 512
         model_path: google/muril-base-cased
         num_workers: 2
@@ -34,10 +34,10 @@ stages:
         use_fp16: true
     outs:
     - path: model_artifacts/args.pt
-      md5: 470ed509e1bc577a2f4a3728a7c43068
+      md5: ca8ebc80d573df092a32cb7bf4e93704
       size: 1519
     - path: model_artifacts/model_best.pt
-      md5: 5f18b8d607f662120001c8b19cb9245c
+      md5: cf8bde946b04aec603155e594d20a04e
       size: 952695135
     - path: model_artifacts/test_labels.txt
       md5: 72cf4d8023dc267d0ba0d192bf69f769
@@ -46,14 +46,14 @@ stages:
       md5: 754f94eae50a55c44e1e98a5a1fdca7b
       size: 1111
     - path: model_artifacts/test_labels_pred.txt
-      md5: 5b7139341b68d94af7ea64c2bceffccc
+      md5: 06a92b6ecaaf6aea09d1e38cc5e4e774
       size: 1111
     - path: model_artifacts/test_labels_prob_pred.txt
-      md5: cfe6a357e93443f54e417d03f56ed4b4
+      md5: 721243e6d7eff856195e6aff758b64d2
       size: 3585
     - path: model_artifacts/test_pr_values.csv
-      md5: bf5e9a004b19ffafd9bc6fefae51bb69
-      size: 18715
+      md5: 8ba3f08c7fa948f888f8f3e97f24a234
+      size: 16521
   test:
     cmd: python test.py
     deps:
@@ -61,15 +61,15 @@ stages:
       md5: b2b94312fcc8984cbc8ae92e14ecb2ac
       size: 219711
     - path: model_artifacts/args.pt
-      md5: 470ed509e1bc577a2f4a3728a7c43068
+      md5: ca8ebc80d573df092a32cb7bf4e93704
       size: 1519
     - path: model_artifacts/model_best.pt
-      md5: 5f18b8d607f662120001c8b19cb9245c
+      md5: cf8bde946b04aec603155e594d20a04e
       size: 952695135
     - path: test.py
       md5: 7f192bc24275ffcdd616d05f2aff11d6
       size: 3136
     outs:
     - path: test_results/test_metrics.json
-      md5: cd3f3cdea24ab6c9ddb4d52df206b99c
-      size: 524
+      md5: a8e98dfbce0280a17476e5388be5c636
+      size: 525
