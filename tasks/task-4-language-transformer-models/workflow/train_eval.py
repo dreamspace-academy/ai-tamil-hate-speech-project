@@ -84,12 +84,13 @@ def model_eval(i_epoch, data, data_partition_name, model, args, criterion, store
             losses.append(loss.item())
 
             probs = torch.nn.functional.softmax(out, dim=1)
-            pred = probs.argmax(dim=1).cpu().detach().numpy()
-            preds.append(pred)
-            
+            pred_idxs = probs.argmax(dim=1).cpu().detach().numpy()
+            pred = [1 if p[1] > args.class_threshold else 0 for i,p in enumerate(probs)]
             tgt = tgt.cpu().detach().numpy()
+            
+            preds.append(pred)
             tgts.append(tgt)
-            prob_preds.extend([probs[i].cpu().detach().numpy()[idx] for i,idx in enumerate(pred)])
+            prob_preds.extend([probs[i].cpu().detach().numpy()[idx] for i,idx in enumerate(pred_idxs)])
 
     metrics = {"loss": np.mean(losses)}
     
