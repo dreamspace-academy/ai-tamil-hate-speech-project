@@ -25,7 +25,7 @@ class TxtEncoder(nn.Module):
 class SentClf(nn.Module):
     def __init__(self, args):
         super(SentClf, self).__init__()
-        num_outputs = 1 if args.num_labels == 2 else args.num_labels
+        num_outputs = args.num_labels
         self.args = args
         self.enc = TxtEncoder(args)
         self.clf = nn.Sequential(
