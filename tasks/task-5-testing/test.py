@@ -18,16 +18,16 @@ def predict(input_text):
     logits = model(tokenized_inputs['input_ids'], tokenized_inputs['attention_mask'])
     
     # Transform logits into actual probabilities
-    prob = torch.sigmoid(logits).cpu().detach().numpy()[0]
+    probs = torch.nn.functional.softmax(logits, dim=1).detach().cpu().numpy()[0]
 
     # A single probability is returned. Threshold the probability into ether 0 or 1
-    pred_index = int(prob > 0.5)
+    pred_index = 1 if probs[1] > args.class_threshold else 0
     
     # Get label associated to index
     pred_label = args.labels[pred_index]
     
     # Calculate confidence
-    confidence = prob if pred_index == 1 else 1-prob
+    confidence = probs[pred_index]
     
     return pred_label, confidence
 
