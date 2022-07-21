@@ -4,12 +4,15 @@
 For the (manual) annotation task we hosted an instance of [doccano](https://github.com/doccano/doccano) on AWS. This is an open source tool which is light weight and very suitable for text classification annotation. The details of how setting up an own instance - either locally or hosting it on a virtual machine - can be found in the tool documentation. 
 
 ## Folder structure
+```
+data 
+│   ├── doccano_annotated.csv - (labeled and unlabeled) data extracted from doccano
+│   └── doccano_annotated.csv.dvc - dvc tracking file
+├── doccano.db - sqlite database resulting from hosted doccano service
+├── doccano.db.dvc - dvc tracking file
+└── README.md - this file
 
-data \
-│   ├── doccano_annotated.csv - (labeled and unlabeled) data extracted from doccano \
-│   └── doccano_annotated.csv.dvc - dvc tracking file \
-├── doccano.db - sqlite database resulting from hosted doccano service \
-└── doccano.db.dvc - dvc tracking file 
+ ```
 
 
 ## Continuing the annotation/using already set up annotation project
