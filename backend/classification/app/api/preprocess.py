@@ -1,10 +1,8 @@
 import torch
 from transformers import AutoTokenizer
-import json
 from app.api.bert_model_artifacts.network import SentClf
 
 device = torch.device("cpu")
-
 
 class ClassProcessor:
     def __init__(self, model_name: str = None, service: str = "classification"):
@@ -62,12 +60,12 @@ class ClassProcessor:
         prob = torch.sigmoid(logits).cpu().detach().numpy()[0]
         
         # A single probability is returned. Threshold the probability into ether 0 or 1
-        pred_index = int(prob > 0.4)
+        pred_index = 1 if prob[1]>0.4 else 0
         
         # Get label associated to index
         pred_label = self.args.labels[pred_index]
         
         # Calculate confidence
-        confidence = prob if pred_index == 1 else 1-prob
+        confidence = prob[pred_index]
         
         return pred_label, confidence

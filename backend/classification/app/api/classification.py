@@ -1,15 +1,12 @@
 import json
 from typing import List
 from fastapi import APIRouter, HTTPException,FastAPI, Request
-import torch
-from transformers import AutoConfig, AutoTokenizer, AutoModelForSequenceClassification
-
 
 from app.api.model import Input, ClassResponse
 from app.api.preprocess import ClassProcessor
 
 classification = APIRouter()
-
+class_process = ClassProcessor()
 
 # Path to provide details of the services loaded in the backend. Details are obtained from the config json file
 @classification.get("/info")
@@ -36,9 +33,7 @@ async def classifiy(item: Input):
         "confidence":confidence
     }
     """
-    output_dict = dict()
-    model = item.model.lower() if item.model else None
-    class_process = ClassProcessor(model_name=model)
+    output_dict = dict()    
     text = item.text
     perdiction, confidence = class_process.inference(input_text=text)
     output_dict["category"] = perdiction
