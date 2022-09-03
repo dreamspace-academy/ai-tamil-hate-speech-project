@@ -1,8 +1,6 @@
---extra-index-url https://download.pytorch.org/whl/cpu
 regex==2018.01.10
 starlette
-transformers==4.19.2
-torch==1.11
+transformers
 json5==0.9.5
 pydantic==1.6.2
-fastapi==0.65.2
+fastapi

@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn:python3.8-slim
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 
 RUN apt-get update && \
     apt-get -y upgrade && \
