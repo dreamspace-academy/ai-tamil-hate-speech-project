@@ -24,6 +24,7 @@ class ClassProcessor:
         # Selecting the correct model based on the passed madel input
         self.args = torch.load(self.args_path)
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        print(f"Loading model in {self.device} device")
         self.tokenizer = AutoTokenizer.from_pretrained("google/muril-base-cased", use_fast=True)
         self.model = SentClf(self.args)
         self.model.load_state_dict(torch.load(self.model_path, map_location=self.device))
