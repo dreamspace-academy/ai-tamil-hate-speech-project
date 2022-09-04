@@ -4,3 +4,4 @@ transformers
 json5==0.9.5
 pydantic==1.6.2
 fastapi
+uvicorn

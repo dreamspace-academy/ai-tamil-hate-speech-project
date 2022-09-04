@@ -10,8 +10,9 @@ WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
 
+ENV PATH /root/.local/bin:${PATH}
+
 RUN pip install --no-cache-dir -r /app/requirements.txt \
     && rm -rf /root/.cache/pip
 
 COPY . /app/
-
