@@ -2,6 +2,6 @@ regex==2018.01.10
 starlette
 transformers
 json5==0.9.5
-pydantic==1.6.2
+pydantic==1.5
 fastapi
 uvicorn
