@@ -1,0 +1,1 @@
+{"MFT-Neutral": 0.8421052631578947, "MFT-Adversarial": 0.8125, "MFT-Script": {"error_by_type": {"Tamil": 1.0, "Tamil latin": 1.0, "Tamglish": 1.0, "Label": 1.0}, "total_error": 1.0}, "INV-Typos": 0.08333333333333331}
