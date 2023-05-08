@@ -1,4 +1,4 @@
-<h1 align="center">OMDENA NYU - Detecting Hate Speech in Tamil Language</h1>
+<h1 align="center">AI Tamil Hate Speech Detector</h1>
 
 
 <p align="center">
@@ -15,16 +15,14 @@
 3. [Project Details](#section03)
     - [Screenshot](#section03a)
     - [Directory Details](#section03b)
-4. [Sphinx Documentation](#section04)
-4. [Troubleshooting FAQs](#section05)
-5. [License](#section06)
+4. [License](#section04)
 
 
 <a id='section01'></a>
 
 ## Introduction
 
-A global team of 50 AI changemakers to detect hate speech in Tamil language.The partner for this challenge is social enterprise DreamSpace Academy (DSA). The Challenge is supported by the NYU Center on International Cooperation and the Netherlands Ministry of Foreign Affairs.
+This project is the result of a collaboration between DreamSpace Academy, NYU CIC, and Omdena, and was funded by NYU CIC. The goal of the project is to detect hate speech on social media platforms that's in either Tamil, English or Tanglish (English transliterated into Tamil). A global team of 50 AI changemakers took on the task to detect hate speech in Tamil language.The partner for this challenge is social enterprise DreamSpace Academy (DSA). The Challenge is supported by the NYU Center on International Cooperation and the Netherlands Ministry of Foreign Affairs.
 
 
 The focus is on the following hate-speech related categories:
@@ -119,22 +117,7 @@ The focus is on the following hate-speech related categories:
     * `config.json`: This file contains the details of the models in the backend and the dataset they are trained on.
 
 <a id='section04'></a>
-## Sphinx Documentation
-1. **Auto build html document.**
-   - Go to `docs` folder
-   
-   ```console
-   cd docs
-   sphinx-autobuild . ./_build/html
-   ```
- 2. **Access Sphinx documentation**
-- Documentation - on localhost
-
-
-<a id='section05'></a>
-## Troubleshooting FAQs
-
-<a id='section06'></a>
 
 ## License
 
+This project is licensed under the Apache License 2.0. You may not use any trademarks associated with the software without permission. The full text of the license can be found in the [LICENSE](LICENSE) file.
