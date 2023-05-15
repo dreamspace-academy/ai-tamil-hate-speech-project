@@ -1,10 +1,8 @@
 <h1 align="center">AI Tamil Hate Speech Detector</h1>
 
-
 <p align="center">
 <img alt="OMDENA NYU" src="misc/Omdena-NYU.png">
 </p>
-
 
 ## Contents
 
@@ -15,8 +13,9 @@
 3. [Project Details](#section03)
     - [Screenshot](#section03a)
     - [Directory Details](#section03b)
-4. [License](#section04)
+4. [Test API with Python script](#section04)
 
+5. [License](#section05)
 
 <a id='section01'></a>
 
@@ -24,31 +23,27 @@
 
 This project is the result of a collaboration between DreamSpace Academy, NYU CIC, and Omdena, and was funded by NYU CIC. The goal of the project is to detect hate speech on social media platforms that's in either Tamil, English or Tanglish (English transliterated into Tamil). A global team of 50 AI changemakers took on the task to detect hate speech in Tamil language.The partner for this challenge is social enterprise DreamSpace Academy (DSA). The Challenge is supported by the NYU Center on International Cooperation and the Netherlands Ministry of Foreign Affairs.
 
-
 The focus is on the following hate-speech related categories:
 
-* Community-based hate speech
+- Community-based hate speech
 
-* Religion-based hate speech
+- Religion-based hate speech
 
-* Gender-based hate speech
+- Gender-based hate speech
 
-* Political hate speech
-
+- Political hate speech
 
 <a id='section01a'></a>
 
 ### Solution
 
-* **An AI model written in Python**: Built using `Fastapi` and `Streamlit` making the complete code base in Python.
-
+- **An AI model written in Python**: Built using `Fastapi` and `Streamlit` making the complete code base in Python.
 
 <a id='section02'></a>
 
 ## Project Setup and Documentation
 
-1.  **Clone the Repo.**
-
+1. **Clone the Repo.**
 
 2. **Run the backend service.** (Make sure Docker is running.)
     - Go to the `backend` folder
@@ -60,7 +55,7 @@ The focus is on the following hate-speech related categories:
     ```
 
 3. **Run the frontend service.**
-   
+
     - Go to the `frontend` folder
     <!---
     - Create the docker image from the `Docker File`
@@ -72,14 +67,14 @@ The focus is on the following hate-speech related categories:
     ```
     --->
     - Run the app with the streamlit run command
+
     ```console  
     $ cd frontend
     frontend:~$ streamlit run NLPfile.py
     ```
 
-4. **Access to Fastapi Documentation**: 
-    - Hate Classification: http://localhost:8080/api/v1/classification/docs
-
+4. **Access to Fastapi Documentation**:
+    - Hate Classification: <http://localhost:8080/api/v1/classification/docs>
 
 <a id='section03'></a>
 
@@ -97,11 +92,12 @@ The focus is on the following hate-speech related categories:
 
 ### Directory Details
 
-* **Front End**: streamlit code is in the `frontend` folder. Along with the `Dockerfile` and `requirements.txt`
+- **Front End**: streamlit code is in the `frontend` folder. Along with the `Dockerfile` and `requirements.txt`
 
-* **Back End**: Fastapi code is in the `backend` folder.
-    * The project has been implemented as a microservice, with its own fastapi server and requirements and Dockerfile.
-    * Directory tree as below:
+- **Back End**: Fastapi code is in the `backend` folder.
+  - The project has been implemented as a microservice, with its own fastapi server and requirements and Dockerfile.
+  - Directory tree as below:
+
     ```
     - classification
         > app
@@ -110,13 +106,24 @@ The focus is on the following hate-speech related categories:
                     - model.bin
                     - network.py
     ```
-    * Each folder model will need the following files:
-        * Model bin file is the saved model after training.
-        * `network.py` for customised model, define class here.
 
-    * `config.json`: This file contains the details of the models in the backend and the dataset they are trained on.
+  - Each folder model will need the following files:
+    - Model bin file is the saved model after training.
+    - `network.py` for customised model, define class here.
+
+  - `config.json`: This file contains the details of the models in the backend and the dataset they are trained on.
 
 <a id='section04'></a>
+
+## Test API with Python Script
+
+- Run the following script with your desired text input as the `data` variable:<br/>
+```
+$ cd backend
+backend:~$ python backend\test_api.py
+```
+
+<a id='section05'></a>
 
 ## License
 
