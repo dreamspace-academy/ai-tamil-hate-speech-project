@@ -27,7 +27,7 @@ class ClassProcessor:
         print(f"Loading model in {self.device} device")
         self.tokenizer = AutoTokenizer.from_pretrained("google/muril-base-cased", use_fast=True)
         self.model = SentClf(self.args)
-        self.model.load_state_dict(torch.load(self.model_path, map_location=self.device))
+        self.model.load_state_dict(torch.load(self.model_path, map_location=self.device), strict=False)
         self.model = self.model.to(self.device)
         self.model.eval()
 
